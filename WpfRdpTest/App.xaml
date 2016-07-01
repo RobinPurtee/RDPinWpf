@@ -1,0 +1,64 @@
+﻿<Application x:Class="WpfRdpTest.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:WpfRdpTest"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <Color x:Key="ApolloColorPalette.WH" A="255" R="255" G="255" B="255"/>
+        <Color x:Key="ApolloColorPalette.YL" A="255" R="255" G="217" B="102"/>
+        <Color x:Key="ApolloColorPalette.GN" A="255" R="127" G="186" B="0"/>
+        <Color x:Key="ApolloColorPalette.BL" A="255" R="0" G="62" B="108"/>
+        <Color x:Key="ApolloColorPalette.DB" A="255" R="8" G="47" B="76"/>
+        <Color x:Key="ApolloColorPalette.LBG1" A="255" R="173" G="185" B="202"/>
+        <Color x:Key="ApolloColorPalette.LBG2" A="255" R="68" G="84" B="106"/>
+        <Color x:Key="ApolloColorPalette.LBG3" A="255" R="51" G="63" B="80"/>
+        <Color x:Key="ApolloColorPalette.BG1" A="255" R="34" G="42" B="53"/>
+        <Color x:Key="ApolloColorPalette.BG2" A="255" R="21" G="26" B="33"/>
+        <Color x:Key="ApolloColorPalette.BG3" A="255" R="0" G="14" B="23"/>
+        <Color x:Key="ApolloColorPalette.SK-RED" A="255" R="232" G="17" B="35"/>
+        <Color x:Key="ApolloColorPalette.SK-RED1" A="255" R="208" G="15" B="31"/>
+        <Color x:Key="ApolloColorPalette.SK-RED2" A="255" R="162" G="12" B="24"/>
+        <Color x:Key="ApolloColorPalette.SK-TQ" A="255" R="0" G="175" B="240"/>
+        <Color x:Key="ApolloColorPalette.SK-DT" A="255" R="0" G="134" B="183"/>
+        <Color x:Key="ApolloColorPalette.SK-DT2" A="255" R="0" G="104" B="142"/>
+        <Color x:Key="ApolloColorPalette.SK-DT3" A="255" R="1" G="61" B="85"/>
+        <Color x:Key="RemoteDeskTopPalette.BannerText" A="255" R="173" G="185" B="202"/>
+        <Color x:Key="RemoteDeskTopPalette.BorderLine" A="255" R="92" G="111" B="139"/>
+
+        <SolidColorBrush x:Key="BannerTextBrush" Color="{StaticResource RemoteDeskTopPalette.BannerText}"/>
+
+        <SolidColorBrush x:Key="ApolloBrushes.WH" Color="{StaticResource ApolloColorPalette.WH}" />
+        <SolidColorBrush x:Key="ApolloBrushes.YL" Color="{StaticResource ApolloColorPalette.YL}" />
+        <SolidColorBrush x:Key="ApolloBrushes.GN" Color="{StaticResource ApolloColorPalette.GN}" />
+        <SolidColorBrush x:Key="ApolloBrushes.BL" Color="{StaticResource ApolloColorPalette.BL}" />
+        <SolidColorBrush x:Key="ApolloBrushes.DB" Color="{StaticResource ApolloColorPalette.DB}" />
+        <SolidColorBrush x:Key="ApolloBrushes.LBG1" Color="{StaticResource ApolloColorPalette.LBG1}" />
+        <SolidColorBrush x:Key="ApolloBrushes.LBG2" Color="{StaticResource ApolloColorPalette.LBG2}" />
+        <SolidColorBrush x:Key="ApolloBrushes.LBG3" Color="{StaticResource ApolloColorPalette.LBG3}" />
+        <SolidColorBrush x:Key="ApolloBrushes.BG1"  Color="{StaticResource ApolloColorPalette.BG1}" />
+        <SolidColorBrush x:Key="ApolloBrushes.BG2"  Color="{StaticResource ApolloColorPalette.BG2}" />
+        <SolidColorBrush x:Key="ApolloBrushes.BG3"  Color="{StaticResource ApolloColorPalette.BG3}" />
+        <SolidColorBrush x:Key="ApolloBrushes.SK-RED"  Color="{StaticResource ApolloColorPalette.SK-RED}" />
+        <SolidColorBrush x:Key="ApolloBrushes.SK-RED1"  Color="{StaticResource ApolloColorPalette.SK-RED1}" />
+        <SolidColorBrush x:Key="ApolloBrushes.SK-RED2"  Color="{StaticResource ApolloColorPalette.SK-RED2}" />
+        <SolidColorBrush x:Key="ApolloBrushes.SK-TQ" Color="{StaticResource ApolloColorPalette.SK-TQ}" />
+        <SolidColorBrush x:Key="ApolloBrushes.SK-DT"  Color="{StaticResource ApolloColorPalette.SK-DT}" />
+        <SolidColorBrush x:Key="ApolloBrushes.SK-DT2"  Color="{StaticResource ApolloColorPalette.SK-DT2}" />
+        <SolidColorBrush x:Key="ApolloBrushes.SK-DT3"  Color="{StaticResource ApolloColorPalette.SK-DT3}" />
+
+        <SolidColorBrush x:Key="Button_Back_Rest" Color="{StaticResource ApolloColorPalette.BL}"/>
+        <SolidColorBrush x:Key="Button_Font_Rest" Color="{StaticResource ApolloColorPalette.LBG1}"/>
+
+        <SolidColorBrush x:Key="Button_Back_Rollover" Color="{StaticResource ApolloColorPalette.DB}"/>
+        <SolidColorBrush x:Key="Button_Font_Rollover" Color="{StaticResource ApolloColorPalette.LBG1}"/>
+
+        <SolidColorBrush x:Key="Button_Back_Pressed" Color="{StaticResource ApolloColorPalette.DB}"/>
+        <SolidColorBrush x:Key="Button_Font_Pressed" Color="{StaticResource ApolloColorPalette.LBG1}"/>
+
+        <SolidColorBrush x:Key="Button_Back_Selected" Color="{StaticResource ApolloColorPalette.DB}"/>
+        <SolidColorBrush x:Key="Button_Font_Selected" Color="{StaticResource ApolloColorPalette.LBG1}"/>
+
+        <SolidColorBrush x:Key="Button_Back_Disabled" Color="{StaticResource ApolloColorPalette.DB}"/>
+        <SolidColorBrush x:Key="Button_Font_Disabled" Color="{StaticResource ApolloColorPalette.LBG2}"/>
+    </Application.Resources>
+</Application>
