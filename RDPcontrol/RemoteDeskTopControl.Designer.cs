@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace RDPcontrol
 {
@@ -8,6 +9,10 @@ namespace RDPcontrol
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+
+
+        public Size WindowSize { get; set; }
+
 
         /// <summary> 
         /// Clean up any resources being used.

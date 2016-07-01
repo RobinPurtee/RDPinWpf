@@ -69,7 +69,9 @@ namespace WpfRdpTest
 
         private void ConnectBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            RDCHost host = new RDCHost(Computer, User);
+            host.Owner = this;
+            host.ShowDialog();
         }
     }
 }

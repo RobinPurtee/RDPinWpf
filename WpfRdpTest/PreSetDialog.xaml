@@ -5,65 +5,98 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfRdpTest"
         mc:Ignorable="d"
-        Height="320" Width="355" 
+        Height="399.829" Width="384.339" 
         BorderThickness="3" 
         ResizeMode="NoResize" 
         WindowStartupLocation="CenterOwner" 
         WindowStyle="None">
-    <Canvas x:Name="RDP" Background="#FF333F50">
-        <Rectangle Width="355" Height="31" Canvas.Left="0" Canvas.Top="-0.652" Stretch="Fill" Fill="#FF222A35"/>
-        <Rectangle Width="355" Height="22" Canvas.Left="0" Canvas.Top="31.812" Stretch="Fill" Fill="#FF44546A"/>
-        <Rectangle Width="355" Height="20" Canvas.Left="0" Canvas.Top="102.761" Stretch="Fill" Fill="#FF44546A"/>
-        <Rectangle Width="355" Height="20" Canvas.Left="0" Canvas.Top="185.244" Stretch="Fill" Fill="#FF44546A"/>
-        <Rectangle Width="355" Height="20" Canvas.Left="0" Canvas.Top="252.446" Stretch="Fill" Fill="#FF44546A"/>
-        <TextBlock TextAlignment="Left" FontFamily="Segoe UI" Canvas.Left="10" Canvas.Top="4.809" HorizontalAlignment="Left" VerticalAlignment="Center">
-		    <Run Text="Pre-selections" Foreground="#FFFFFFFF"/>
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Margin" Value="10,0,0,0"/>
+        </Style>
+        <Style x:Key="HeaderText" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="{DynamicResource ApolloBrushes.WH}"/>
+            <Setter Property="Margin" Value="10,0,0,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="LabelText" TargetType="Run">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="{DynamicResource ApolloBrushes.WH}"/>
+        </Style>
+        <Style x:Key="OptionText" TargetType="Run">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#FF00AFF0"/>
+        </Style>
+    </Window.Resources>
+    <Grid Background="{DynamicResource ApolloBrushes.LBG3}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="48*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="63*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="47*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="43*"/>
+        </Grid.RowDefinitions>
+
+        <Rectangle Grid.Row="0" Stretch="Fill" Fill="{DynamicResource ApolloBrushes.BG1}"/>
+        <Rectangle Grid.Row="1" Stretch="Fill" Fill="{DynamicResource ApolloBrushes.LBG2}"/>
+        <Rectangle Grid.Row="3" Stretch="Fill" Fill="{DynamicResource ApolloBrushes.LBG2}"/>
+        <Rectangle Grid.Row="5" Stretch="Fill" Fill="{DynamicResource ApolloBrushes.LBG2}"/>
+        <Rectangle Grid.Row="7" Stretch="Fill" Fill="{DynamicResource ApolloBrushes.LBG2}"/>
+        <TextBlock Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Run Text="Pre-selections" Foreground="{DynamicResource ApolloBrushes.WH}"/>
         </TextBlock>
-        <Button x:Name="CloseBtn" Canvas.Left="327.348" Canvas.Top="10" Background="Transparent" BorderBrush="{x:Null}" Click="CloseBtn_Click">
+        <Button x:Name="CloseBtn" Grid.Row="0" Background="Transparent" BorderBrush="{x:Null}" Click="CloseBtn_Click" HorizontalAlignment="Right" Margin="0,0,20,0">
             <Path Width="12.05" Height="12.05" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 387.704,-37.0914L 392.072,-32.682L 396.344,-37.0914L 397.822,-35.37L 393.639,-31.1001L 398.049,-26.6481L 396.344,-25.0414L 392,-29.4268L 387.704,-25.0414L 386.226,-26.6481L 390.442,-30.9995L 385.999,-35.4847L 387.704,-37.0914 Z "/>
         </Button>
-        <TextBlock TextAlignment="Left" Width="Auto" Height="Auto" Canvas.Left="10" Canvas.Top="33.348">
-		<Run FontFamily="Segoe UI" FontWeight="Bold" FontSize="14" Text="Display" Foreground="#FFFFFFFF"/>
-		<LineBreak/>
-		<Run FontFamily="Segoe UI" FontSize="14" Text="Configuration: " Foreground="#FFFFFFFF"/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="Full Screen" Foreground="#FF00AFF0"/>
-		<LineBreak/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="Colors: " Foreground="#FFFFFFFF"/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="Highest Quality (32 bit)" Foreground="#FF00AFF0"/>
-		<LineBreak/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="Always display connection bar" Foreground="#FF00AFF0"/>
-		<LineBreak/>
-		<Run FontFamily="Segoe UI" FontWeight="Bold" FontSize="14" Text="Local Resources" Foreground="#FFFFFFFF"/>
-		<LineBreak/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="Remote Audio: Playback: " Foreground="#FFFFFFFF"/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="Play on this computer" Foreground="#FF00AFF0"/>
-		<LineBreak/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="                         Recording: " Foreground="#FFFFFFFF"/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="Do not record" Foreground="#FF00AFF0"/>
-		<LineBreak/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="Keyboard: " Foreground="#FFFFFFFF"/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="On the remote computer" Foreground="#FF00AFF0"/>
-		<LineBreak/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="Local Devices and Resources: " Foreground="#FFFFFFFF"/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="No local resources are shared" Foreground="#FF00AFF0"/>
-		<LineBreak/>
-		<Run FontFamily="Segoe UI" FontWeight="Bold" FontSize="14" Text="Experience" Foreground="#FFFFFFFF"/>
-		<LineBreak/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="Performance: " Foreground="#FFFFFFFF"/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="Detect connection quality automatically" Foreground="#FF00AFF0"/>
-		<LineBreak/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="                       " Foreground="#FFFFFFFF"/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="Persistent bitmap caching" Foreground="#FF00AFF0"/>
-		<LineBreak/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="                       " Foreground="#FFFFFFFF"/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="Reconnect it the connection is dropped" Foreground="#FF00AFF0"/>
-		<LineBreak/>
-		<Run FontFamily="Segoe UI" FontWeight="Bold" FontSize="14" Text="Adanced" Foreground="#FFFFFFFF"/>
-		<LineBreak/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="Server Authentication: " Foreground="#FFFFFFFF"/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="Do not connect" Foreground="#FF00AFF0"/>
-		<LineBreak/>
-		<Run FontFamily="Segoe UI" FontSize="12" Text="Do not support Remote Desktop Gateway configuration" Foreground="#FF00AFF0"/>
+        <TextBlock Grid.Row="1" Style="{StaticResource HeaderText}" Text="Display"/>
+        <TextBlock Grid.Row="2" >
+            <Run Text="Confguration: " Style="{StaticResource LabelText}" />
+            <Run Text="Full Screen" Style="{StaticResource OptionText}"/>
+            <LineBreak/>
+            <Run Text="Colors: " Style="{StaticResource LabelText}"/>
+            <Run Text="Highest Quality (32 bit)" Style="{StaticResource OptionText}"/>
+            <LineBreak/>
+            <Run Text="Always display connection bar" Style="{StaticResource OptionText}"/>
         </TextBlock>
-    </Canvas>
+        <TextBlock Grid.Row="3" Text="Local Resources" Style="{StaticResource HeaderText}"/>
+        <TextBlock Grid.Row="4">
+            <Run Text="Remote Audio: Playback: " Style="{StaticResource LabelText}"/>
+            <Run Text="Play on this computer" Style="{StaticResource OptionText}"/>
+            <LineBreak/>
+            <Run Text="                         Recording: " Style="{StaticResource LabelText}"/>
+            <Run Text="Do not record" Style="{StaticResource OptionText}"/>
+            <LineBreak/>
+            <Run Text="Keyboard: " Style="{StaticResource LabelText}"/>
+            <Run Text="On the remote computer" Style="{StaticResource OptionText}"/>
+            <LineBreak/>
+            <Run Text="Local Devices and Resources: " Style="{StaticResource LabelText}"/>
+            <Run Text="No local resources are shared" Style="{StaticResource OptionText}"/>
+        </TextBlock>
+        <TextBlock Grid.Row="5" Text="Experience" Style="{StaticResource HeaderText}"/>
+        <TextBlock Grid.Row="6">
+            <Run Text="Performance: " Style="{StaticResource LabelText}"/>
+            <Run Text="Detect connection quality automatically" Style="{StaticResource OptionText}"/>
+            <LineBreak/>
+            <Run Text="                       " Style="{StaticResource LabelText}"/>
+            <Run Text="Persistent bitmap caching" Style="{StaticResource OptionText}"/>
+            <LineBreak/>
+            <Run Text="                       " Style="{StaticResource LabelText}"/>
+            <Run Text="Reconnect it the connection is dropped" Style="{StaticResource OptionText}"/>
+        </TextBlock>
+        <TextBlock Grid.Row="7" Text="Adanced" Style="{StaticResource HeaderText}"/>
+        <TextBlock Grid.Row="8">
+            <Run Text="Server Authentication: " Style="{StaticResource LabelText}"/>
+            <Run Text="Do not connect" Style="{StaticResource OptionText}"/>
+            <LineBreak/>
+            <Run Text="Do not support Remote Desktop Gateway configuration" Style="{StaticResource OptionText}"/>
+        </TextBlock>
+    </Grid>
 </Window>

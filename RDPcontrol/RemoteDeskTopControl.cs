@@ -9,15 +9,66 @@ namespace RDPcontrol
 
 
         #region out going events and support classes
+        public enum DisconnectReason : int
+        {
+            SocketClosed = 2308,
+            ByServer = 3,
+            ClientDecompressionError = 3080,
+            ConnectionTimedOut = 264,
+            DecryptionError = 3078,
+            DNSLookupFailed = 260,
+            DNSLookupFailed2 = 1288,
+            EncryptionError = 2822,
+            GetHostByNameFailed = 1540,
+            HostNotFound = 520,
+            InternalError = 1032,
+            InternalSecurityError = 2310,
+            InternalSecurityError2 = 2566,
+            InvalidEncryption = 1286,
+            InvalidIP = 2052,
+            InvalidServerSecurityInfo = 1542,
+            InvalidSecurityData = 1030,
+            InvalidIPAddr = 776,
+            LicensingFailed = 2056,
+            LicensingTimeout = 2312,
+            LocalNotError = 1,
+            NoInfo = 0,
+            OutOfMemory = 262,
+            OutOfMemory2 = 518,
+            OutOfMemory3 = 774,
+            RemoteByUser = 2,
+            ServerCertificateUnpackErr = 1798,
+            SocketConnectFailed = 516,
+            SocketRecvFailed = 1028,
+            TimeoutOccurred = 1796,
+            TimerError = 1544,
+            WinsockSendFailed = 772,
+            DISABLED = 2823,
+            EXPIRED = 3591,
+            LOCKED_OUT = 3335,
+            RESTRICTION = 3079,
+            IRED = 6919,
+            ON_POLICY = 5639,
+            ED_REQUIRED_BY_SERVER = 8455,
+            ILURE = 2055,
+            NTICATING_AUTHORITY = 6151,
+            USER = 2567,
+            _EXPIRED = 3847,
+            _MUST_CHANGE = 4615,
+            TLM_ONLY = 5895,
+            D_CARD_BLOCKED = 8711,
+            D_WRONG_PIN = 7175
+        }
+
         /// <summary>
         /// class to hold the disconnect reason for the disconnect event
         /// </summary>
         public class DisconnectEventArgs : EventArgs
         {
-            public int Reason;
+            public DisconnectReason Reason;
             public DisconnectEventArgs(int reason)
             {
-                Reason = reason;
+                Reason = (DisconnectReason)reason;
             }             
         }
         /// <summary>
@@ -31,6 +82,108 @@ namespace RDPcontrol
         /// Fired on disconnecting from the remote host
         /// </summary>
         public event DisconnectedHandler OnDisconnected;
+
+
+
+
+        public event EventHandler OnAuthenticationWarningDismissed
+        {
+            add { axRdpClient.OnAuthenticationWarningDismissed += value; }
+            remove { axRdpClient.OnAuthenticationWarningDismissed -= value; }
+        }
+
+        public event EventHandler OnAuthenticationWarningDisplayed
+        {
+            add { axRdpClient.OnAuthenticationWarningDisplayed += value; }
+            remove { axRdpClient.OnAuthenticationWarningDisplayed -= value; }
+        }
+
+        public event EventHandler OnAutoReconnected
+        {
+            add { axRdpClient.OnAutoReconnected += value; }
+            remove { axRdpClient.OnAutoReconnected -= value; }
+        }
+        public event IMsTscAxEvents_OnAutoReconnectingEventHandler OnAutoReconnecting;
+        public event IMsTscAxEvents_OnAutoReconnecting2EventHandler OnAutoReconnecting2;
+        public event IMsTscAxEvents_OnChannelReceivedDataEventHandler OnChannelReceivedData;
+        public event IMsTscAxEvents_OnConfirmCloseEventHandler OnConfirmClose;
+
+
+        public event EventHandler OnConnected
+        {
+            add { axRdpClient.OnConnected += value; }
+            remove { axRdpClient.OnConnected -= value; }
+        }
+        public event EventHandler OnConnecting
+        {
+            add { axRdpClient.OnConnecting += value; }
+            remove { axRdpClient.OnConnecting -= value; }
+        }
+        public event EventHandler OnConnectionBarPullDown
+        {
+            add { axRdpClient.OnConnectionBarPullDown += value; }
+            remove { axRdpClient.OnConnectionBarPullDown -= value; }
+        }
+
+        public event EventHandler OnDevicesButtonPressed
+        {
+            add { axRdpClient.OnDevicesButtonPressed += value; }
+            remove { axRdpClient.OnDevicesButtonPressed -= value; }
+        }
+
+        public event EventHandler OnEnterFullScreenMode
+        {
+            add { axRdpClient.OnEnterFullScreenMode += value; }
+            remove { axRdpClient.OnEnterFullScreenMode -= value; }
+        }
+        public event IMsTscAxEvents_OnFatalErrorEventHandler OnFatalError;
+        public event IMsTscAxEvents_OnFocusReleasedEventHandler OnFocusReleased;
+
+        public event EventHandler OnIdleTimeoutNotification
+        {
+            add { axRdpClient.OnIdleTimeoutNotification += value; }
+            remove { axRdpClient.OnIdleTimeoutNotification -= value; }
+        }
+        public event EventHandler OnLeaveFullScreenMode
+        {
+            add { axRdpClient.OnLeaveFullScreenMode += value; }
+            remove { axRdpClient.OnLeaveFullScreenMode -= value; }
+        }
+
+        public event EventHandler OnLoginComplete
+        {
+            add { axRdpClient.OnLoginComplete += value; }
+            remove { axRdpClient.OnLoginComplete -= value; }
+        }
+
+        public event IMsTscAxEvents_OnLogonErrorEventHandler OnLogonError;
+        public event IMsTscAxEvents_OnMouseInputModeChangedEventHandler OnMouseInputModeChanged;
+        public event IMsTscAxEvents_OnNetworkStatusChangedEventHandler OnNetworkStatusChanged;
+        public event IMsTscAxEvents_OnReceivedTSPublicKeyEventHandler OnReceivedTSPublicKey;
+        public event IMsTscAxEvents_OnRemoteDesktopSizeChangeEventHandler OnRemoteDesktopSizeChange;
+        public event IMsTscAxEvents_OnRemoteProgramDisplayedEventHandler OnRemoteProgramDisplayed;
+        public event IMsTscAxEvents_OnRemoteProgramResultEventHandler OnRemoteProgramResult;
+        public event IMsTscAxEvents_OnRemoteWindowDisplayedEventHandler OnRemoteWindowDisplayed;
+        public event EventHandler OnRequestContainerMinimize
+        {
+            add { axRdpClient.OnRequestContainerMinimize += value; }
+            remove { axRdpClient.OnRequestContainerMinimize -= value; }
+        }
+        public event EventHandler OnRequestGoFullScreen
+        {
+            add { axRdpClient.OnRequestGoFullScreen += value; }
+            remove { axRdpClient.OnRequestGoFullScreen -= value; }
+        }
+        public event EventHandler OnRequestLeaveFullScreen
+        {
+            add { axRdpClient.OnRequestLeaveFullScreen += value; }
+            remove { axRdpClient.OnRequestLeaveFullScreen -= value; }
+        }
+        public event IMsTscAxEvents_OnServiceMessageReceivedEventHandler OnServiceMessageReceived;
+        public event IMsTscAxEvents_OnUserNameAcquiredEventHandler OnUserNameAcquired;
+        public event IMsTscAxEvents_OnWarningEventHandler OnWarning;
+
+
 
 
 
@@ -61,9 +214,25 @@ namespace RDPcontrol
         {
             InitializeComponent();
 
-            axRdpClient.OnConnecting += new System.EventHandler(axRdpClient_OnConnecting);
-            axRdpClient.OnDisconnected += new AxMSTSCLib.IMsTscAxEvents_OnDisconnectedEventHandler(axRdpClient_OnDisconnected);
+            axRdpClient.OnConnecting += axRdpClient_OnConnecting;
+            axRdpClient.OnDisconnected += axRdpClient_OnDisconnected;
+            axRdpClient.OnFatalError += AxRdpClient_OnFatalError;
+            axRdpClient.OnAutoReconnecting += AxRdpClient_OnAutoReconnecting;
+private MSTSCLib.AutoReconnectContinueState AxRdpClient_OnAutoReconnecting(object sender, AxMSTSCLib.IMsTscAxEvents_OnAutoReconnectingEvent e)
+        {
+            throw new NotImplementedException();
+        }
 
+        public event IMsTscAxEvents_OnAutoReconnecting2EventHandler OnAutoReconnecting2;
+            public event IMsTscAxEvents_OnChannelReceivedDataEventHandler OnChannelReceivedData;
+            public event IMsTscAxEvents_OnConfirmCloseEventHandler OnConfirmClose;
+
+
+    }
+
+    private void AxRdpClient_OnFatalError(object sender, AxMSTSCLib.IMsTscAxEvents_OnFatalErrorEvent e)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -163,7 +332,12 @@ namespace RDPcontrol
             Debug.WriteLine("RemoteDeskTopControl.OnConnecting: EvnetArgs type {0}", e.ToString());
         }
 
-
+        /// <summary>
+        /// OnDisconnected event handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <remarks>This is needed to translate the parameter</remarks>
         private void axRdpClient_OnDisconnected(object sender, AxMSTSCLib.IMsTscAxEvents_OnDisconnectedEvent e)
         {
             Debug.WriteLine("OnDisconnected event");
