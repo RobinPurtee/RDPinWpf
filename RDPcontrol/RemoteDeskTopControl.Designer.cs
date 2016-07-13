@@ -45,26 +45,23 @@ namespace RDPcontrol
             this.axRdpClient.Dock = System.Windows.Forms.DockStyle.Fill;
             this.axRdpClient.Enabled = true;
             this.axRdpClient.Location = new System.Drawing.Point(0, 0);
-            this.axRdpClient.Margin = new System.Windows.Forms.Padding(0);
-            this.axRdpClient.MaximumSize = new System.Drawing.Size(1920, 1080);
-            this.axRdpClient.MinimumSize = new System.Drawing.Size(1024, 786);
+            this.axRdpClient.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.axRdpClient.MaximumSize = new System.Drawing.Size(1280, 702);
+            this.axRdpClient.MinimumSize = new System.Drawing.Size(683, 511);
             this.axRdpClient.Name = "axRdpClient";
             this.axRdpClient.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axRdpClient.OcxState")));
-            this.axRdpClient.Size = new System.Drawing.Size(1024, 786);
+            this.axRdpClient.Size = new System.Drawing.Size(683, 511);
             this.axRdpClient.TabIndex = 0;
-            this.axRdpClient.OnConnecting += new System.EventHandler(this.axRdpClient_OnConnecting_1);
             // 
             // RemoteDeskTopControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.axRdpClient);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.MaximumSize = new System.Drawing.Size(1920, 1080);
-            this.MinimumSize = new System.Drawing.Size(1024, 786);
             this.Name = "RemoteDeskTopControl";
-            this.Size = new System.Drawing.Size(1024, 786);
+            this.Size = new System.Drawing.Size(20, 20);
             ((System.ComponentModel.ISupportInitialize)(this.axRdpClient)).EndInit();
             this.ResumeLayout(false);
 

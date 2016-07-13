@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfRdpTest"
         mc:Ignorable="d"
-        Title="RDCHost" Height="300" Width="300" Loaded="HostLoaded" Closing="Window_Closing">
+        Title="RDCHost" Height="1080" Width="1920" 
+        Loaded="HostLoaded"
+        Closing="Window_Closing">
     <Grid Name="HostGrid">
         
     </Grid>

@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Diagnostics;
+using AxMSTSCLib;
 
 namespace RDPcontrol
 {
     public partial class RemoteDeskTopControl : UserControl
     {
 
-
         #region out going events and support classes
+        #region Disconnected
         public enum DisconnectReason : int
         {
             SocketClosed = 2308,
@@ -65,10 +66,10 @@ namespace RDPcontrol
         /// </summary>
         public class DisconnectEventArgs : EventArgs
         {
-            public DisconnectReason Reason;
-            public DisconnectEventArgs(int reason)
+            public DisconnectReason reason;
+            public DisconnectEventArgs(IMsTscAxEvents_OnDisconnectedEvent args)
             {
-                Reason = (DisconnectReason)reason;
+                reason = (DisconnectReason)args.discReason;
             }             
         }
         /// <summary>
@@ -76,15 +77,18 @@ namespace RDPcontrol
         /// </summary>
         /// <param name="sender">the object that fired the event</param>
         /// <param name="args">the reason for the disconnect</param>
-        public delegate void DisconnectedHandler(object sender, DisconnectEventArgs args);
+        public delegate void DisconnectedEventHandler(object sender, DisconnectEventArgs args);
 
         /// <summary>
         /// Fired on disconnecting from the remote host
         /// </summary>
-        public event DisconnectedHandler OnDisconnected;
+        public event DisconnectedEventHandler OnDisconnected;
 
-
-
+        private void AxRdpClient_OnDisconnected(object sender, IMsTscAxEvents_OnDisconnectedEvent e)
+        {
+            OnDisconnected(sender, new DisconnectEventArgs(e));
+        }
+        #endregion
 
         public event EventHandler OnAuthenticationWarningDismissed
         {
@@ -103,10 +107,46 @@ namespace RDPcontrol
             add { axRdpClient.OnAutoReconnected += value; }
             remove { axRdpClient.OnAutoReconnected -= value; }
         }
-        public event IMsTscAxEvents_OnAutoReconnectingEventHandler OnAutoReconnecting;
-        public event IMsTscAxEvents_OnAutoReconnecting2EventHandler OnAutoReconnecting2;
-        public event IMsTscAxEvents_OnChannelReceivedDataEventHandler OnChannelReceivedData;
-        public event IMsTscAxEvents_OnConfirmCloseEventHandler OnConfirmClose;
+
+        #region AutoReconnectingEvent
+        public class AutoReconnectingEventArgs : EventArgs
+        {
+            public int  attemptCount;
+            public int  disconnectReason;
+            public int  maxAttemptCount;
+            public bool networkAvailable;
+
+            public AutoReconnectingEventArgs(IMsTscAxEvents_OnAutoReconnecting2Event eventArgs)
+            {
+                attemptCount = eventArgs.attemptCount;
+                disconnectReason = eventArgs.disconnectReason;
+                maxAttemptCount = eventArgs.maxAttemptCount;
+                networkAvailable = eventArgs.networkAvailable;
+            }
+        }
+
+        public delegate void AutoReconnectingEventHandler(object sender, AutoReconnectingEventArgs args);
+
+        public event AutoReconnectingEventHandler OnAutoReconnecting;
+
+        private void AxRdpClient_OnAutoReconnecting(object sender, IMsTscAxEvents_OnAutoReconnecting2Event args)
+        {
+            OnAutoReconnecting(sender, new AutoReconnectingEventArgs(args));
+        }
+
+        #endregion
+
+        public event EventHandler OnConfirmClose;
+
+        private bool AxRdpClient_OnConfirmClose(object sender, IMsTscAxEvents_OnConfirmCloseEvent e)
+        {
+            OnConfirmClose(sender, new EventArgs());
+
+            //TODO: figure system to implement a valid response to this
+            // You would prompt the useer to confirm disconnecton.  
+            //      currently assumne disconnect
+            return true;
+        }
 
 
         public event EventHandler OnConnected
@@ -136,8 +176,42 @@ namespace RDPcontrol
             add { axRdpClient.OnEnterFullScreenMode += value; }
             remove { axRdpClient.OnEnterFullScreenMode -= value; }
         }
-        public event IMsTscAxEvents_OnFatalErrorEventHandler OnFatalError;
-        public event IMsTscAxEvents_OnFocusReleasedEventHandler OnFocusReleased;
+
+        #region OnFatalError
+        public enum FatalErrorType 
+        {
+            Unknown = 0,
+            Internal_1 = 1,
+            OutOfMemory = 2,
+            WindowCreation = 3,
+            Internal_2 = 4,
+            Internal_3 = 5,
+            Internal_4 = 6,
+            Unrecoverable = 7,
+            Winsock = 100
+        };
+
+        public class FatalErrorEventArgs : EventArgs
+        {
+            public FatalErrorType error;
+
+            public FatalErrorEventArgs(IMsTscAxEvents_OnFatalErrorEvent args)
+            {
+                error = (FatalErrorType)args.errorCode;
+            }
+        }
+        public delegate void FatalErrorEventHandler(object sender, FatalErrorEventArgs args);
+        public event FatalErrorEventHandler OnFatalError;
+
+        private void AxRdpClient_OnFatalError(object sender, IMsTscAxEvents_OnFatalErrorEvent e)
+        {
+            OnFatalError(sender, new FatalErrorEventArgs(e));
+        }
+        #endregion
+
+
+        //This event is use to move focus away from the control which we do not want, so do not expose it
+        //public event IMsTscAxEvents_OnFocusReleasedEventHandler OnFocusReleased;
 
         public event EventHandler OnIdleTimeoutNotification
         {
@@ -149,21 +223,76 @@ namespace RDPcontrol
             add { axRdpClient.OnLeaveFullScreenMode += value; }
             remove { axRdpClient.OnLeaveFullScreenMode -= value; }
         }
-
         public event EventHandler OnLoginComplete
         {
             add { axRdpClient.OnLoginComplete += value; }
             remove { axRdpClient.OnLoginComplete -= value; }
         }
+        #region Logon Error
+        public enum LogonErrorType
+        {
 
-        public event IMsTscAxEvents_OnLogonErrorEventHandler OnLogonError;
-        public event IMsTscAxEvents_OnMouseInputModeChangedEventHandler OnMouseInputModeChanged;
-        public event IMsTscAxEvents_OnNetworkStatusChangedEventHandler OnNetworkStatusChanged;
-        public event IMsTscAxEvents_OnReceivedTSPublicKeyEventHandler OnReceivedTSPublicKey;
-        public event IMsTscAxEvents_OnRemoteDesktopSizeChangeEventHandler OnRemoteDesktopSizeChange;
-        public event IMsTscAxEvents_OnRemoteProgramDisplayedEventHandler OnRemoteProgramDisplayed;
-        public event IMsTscAxEvents_OnRemoteProgramResultEventHandler OnRemoteProgramResult;
-        public event IMsTscAxEvents_OnRemoteWindowDisplayedEventHandler OnRemoteWindowDisplayed;
+            ARBITRATION_CODE_BUMP_OPTIONS = -5,         //Winlogon is displaying the Session Contention dialog box.
+            ARBITRATION_CODE_CONTINUE_LOGON = -2,       //Winlogon is continuing with the logon process.
+            ARBITRATION_CODE_CONTINUE_TERMINATE = -3,   //Winlogon is ending silently.
+            ARBITRATION_CODE_NOPERM_DIALOG = -6,        //Winlogon is displaying the No Permissions dialog box.
+            ARBITRATION_CODE_REFUSED_DIALOG = -7,       //Winlogon is displaying the Disconnect Refused dialog box.
+            ARBITRATION_CODE_RECONN_OPTIONS = -4,       //Winlogon is displaying the Reconnect dialog box.
+            ERROR_CODE_ACCESS_DENIED = -1,              //The user was denied access.
+            LOGON_FAILED_BAD_PASSWORD = 0,              //The logon failed because the logon credentials are not valid.
+            LOGON_FAILED_UPDATE_PASSWORD = 1,           //The password is expired. The user must update their password to continue logging on. 
+            LOGON_FAILED_OTHER = 2,                     //Another logon or post-logon error occurred. The Remote Desktop client displays a logon screen to the user.
+            LOGON_WARNING = 3,                          //The Remote Desktop client displays a dialog box that contains important information for the user.
+            STATUS_ACCOUNT_RESTRICTION = -1073741714,   //The user name and authentication information are valid, but authentication was blocked due to restrictions on the user account, such as time-of-day restrictions.
+            STATUS_LOGON_FAILURE = -1073741715,         //The attempted logon is not valid. This is due to either an incorrect user name or incorrect authentication information.
+            STATUS_PASSWORD_MUST_CHANGE = -1073741276   //The password is expired. The user must update their password to continue logging on.
+        }
+
+        public class LogonErrorEvent : EventArgs
+        {
+            public LogonErrorType error;
+
+            public LogonErrorEvent(IMsTscAxEvents_OnLogonErrorEvent code)
+            {
+                error = (LogonErrorType)code.lError;
+            }
+        }
+
+        public delegate void LogonErrorEventHandler(object sender, LogonErrorEvent args);
+        public event LogonErrorEventHandler OnLogonError;
+        private void AxRdpClient_OnLogonError(object sender, IMsTscAxEvents_OnLogonErrorEvent e)
+        {
+            OnLogonError(sender, new LogonErrorEvent(e));
+        }
+        #endregion
+        //public event IMsTscAxEvents_OnMouseInputModeChangedEventHandler OnMouseInputModeChanged;
+        //public event IMsTscAxEvents_OnNetworkStatusChangedEventHandler OnNetworkStatusChanged;
+        //public event IMsTscAxEvents_OnReceivedTSPublicKeyEventHandler OnReceivedTSPublicKey;
+        #region RemoteDesktopSizeChanged
+        public class RemoteDesktopSizeChangeEvent : EventArgs
+        {
+            public int height;
+            public int width;
+
+            public RemoteDesktopSizeChangeEvent(IMsTscAxEvents_OnRemoteDesktopSizeChangeEvent args)
+            {
+                height = args.height;
+                width = args.width;
+            }
+        }
+        public delegate void RemoteDesktopSizeChangeEventHandler(object sender, RemoteDesktopSizeChangeEvent args);
+        public event RemoteDesktopSizeChangeEventHandler OnRemoteDesktopSizeChange;
+        private void AxRdpClient_OnRemoteDesktopSizeChange(object sender, IMsTscAxEvents_OnRemoteDesktopSizeChangeEvent e)
+        {
+            OnRemoteDesktopSizeChange(sender, new RemoteDesktopSizeChangeEvent(e));
+        }
+        #endregion
+
+        // running remote apps is not supported
+        //public event IMsTscAxEvents_OnRemoteProgramDisplayedEventHandler OnRemoteProgramDisplayed;
+        //public event IMsTscAxEvents_OnRemoteProgramResultEventHandler OnRemoteProgramResult;
+        //public event IMsTscAxEvents_OnRemoteWindowDisplayedEventHandler OnRemoteWindowDisplayed;
+
         public event EventHandler OnRequestContainerMinimize
         {
             add { axRdpClient.OnRequestContainerMinimize += value; }
@@ -179,11 +308,47 @@ namespace RDPcontrol
             add { axRdpClient.OnRequestLeaveFullScreen += value; }
             remove { axRdpClient.OnRequestLeaveFullScreen -= value; }
         }
-        public event IMsTscAxEvents_OnServiceMessageReceivedEventHandler OnServiceMessageReceived;
-        public event IMsTscAxEvents_OnUserNameAcquiredEventHandler OnUserNameAcquired;
-        public event IMsTscAxEvents_OnWarningEventHandler OnWarning;
 
+        // server messages are not supported
+        //public event IMsTscAxEvents_OnServiceMessageReceivedEventHandler OnServiceMessageReceived;
+        #region UserName Acquired event
+        public class UserNameAcquiredEvent : EventArgs
+        {
+            public string userName;
 
+            public UserNameAcquiredEvent(IMsTscAxEvents_OnUserNameAcquiredEvent e)
+            {
+                userName = e.bstrUserName;
+            }
+        }
+        public delegate void UserNameAcquiredEventHandler(object sender, UserNameAcquiredEvent args);
+        public event UserNameAcquiredEventHandler OnUserNameAcquired;
+        private void AxRdpClient_OnUserNameAcquired(object sender, IMsTscAxEvents_OnUserNameAcquiredEvent e)
+        {
+            OnUserNameAcquired(sender, new UserNameAcquiredEvent(e));
+        }
+        #endregion
+        #region Warning event
+        public enum WarningType
+        {
+            bitmapCorrupt  = 1      //Bitmap cache is corrupt
+        }
+        public class WarningEvent : EventArgs
+        {
+            public WarningType warning;
+            public WarningEvent(IMsTscAxEvents_OnWarningEvent arg)
+            {
+                warning = (WarningType)arg.warningCode;
+            }
+        }
+        public delegate void WarningEventHandler(object sender, WarningEvent e);
+        public event WarningEventHandler OnWarning;
+        private void AxRdpClient_OnWarning(object sender, IMsTscAxEvents_OnWarningEvent e)
+        {
+            OnWarning(sender, new WarningEvent(e));
+        }
+
+        #endregion
 
 
 
@@ -196,7 +361,26 @@ namespace RDPcontrol
         /// <summary>
         /// Test if there is currently a connected session
         /// </summary>
-        public bool IsConnected { get { return axRdpClient != null && axRdpClient.Connected == RDP_CLIENT_CONNECTED; } } 
+        public bool IsConnected
+        {
+            get
+            {
+                bool bRet = axRdpClient != null;
+                if(bRet)
+                {
+                    try
+                    {
+                        bRet = axRdpClient.Connected == RDP_CLIENT_CONNECTED;
+                    }
+                    catch(System.Windows.Forms.AxHost.InvalidActiveXStateException e)
+                    {
+                        Debug.WriteLine("Error while checking connection State: {0}", e.Message);
+                        bRet = false;
+                    }
+                }
+                return bRet;
+            }
+        } 
 
         /// <summary>
         /// Test if a session is currently being connected 
@@ -214,26 +398,17 @@ namespace RDPcontrol
         {
             InitializeComponent();
 
-            axRdpClient.OnConnecting += axRdpClient_OnConnecting;
-            axRdpClient.OnDisconnected += axRdpClient_OnDisconnected;
+            axRdpClient.OnDisconnected += AxRdpClient_OnDisconnected;
+            axRdpClient.OnConfirmClose += AxRdpClient_OnConfirmClose;
             axRdpClient.OnFatalError += AxRdpClient_OnFatalError;
-            axRdpClient.OnAutoReconnecting += AxRdpClient_OnAutoReconnecting;
-private MSTSCLib.AutoReconnectContinueState AxRdpClient_OnAutoReconnecting(object sender, AxMSTSCLib.IMsTscAxEvents_OnAutoReconnectingEvent e)
-        {
-            throw new NotImplementedException();
+            axRdpClient.OnAutoReconnecting2 += AxRdpClient_OnAutoReconnecting;
+            axRdpClient.OnLogonError += AxRdpClient_OnLogonError;
+            axRdpClient.OnRemoteDesktopSizeChange += AxRdpClient_OnRemoteDesktopSizeChange;
+            axRdpClient.OnUserNameAcquired += AxRdpClient_OnUserNameAcquired;
+            axRdpClient.OnWarning += AxRdpClient_OnWarning;
         }
 
-        public event IMsTscAxEvents_OnAutoReconnecting2EventHandler OnAutoReconnecting2;
-            public event IMsTscAxEvents_OnChannelReceivedDataEventHandler OnChannelReceivedData;
-            public event IMsTscAxEvents_OnConfirmCloseEventHandler OnConfirmClose;
 
-
-    }
-
-    private void AxRdpClient_OnFatalError(object sender, AxMSTSCLib.IMsTscAxEvents_OnFatalErrorEvent e)
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// Initiates a connection using the properties currently set on the control.
@@ -264,12 +439,27 @@ private MSTSCLib.AutoReconnectContinueState AxRdpClient_OnAutoReconnecting(objec
         {
 
             MSTSCLib.ControlCloseStatus status = axRdpClient.RequestClose();
-            return status == MSTSCLib.ControlCloseStatus.controlCloseCanProceed;
-            {
 
-            }
+            return status == MSTSCLib.ControlCloseStatus.controlCloseCanProceed;
         }
-        
+
+        public void UpdateSessionDisplaySettings(uint ulDesktopWidth, uint ulDesktopHeight, 
+                                                uint ulPhysicalWidth, uint ulPhysicalHeight, 
+                                                uint ulOrientation, 
+                                                uint ulDesktopScaleFactor, 
+                                                uint ulDeviceScaleFactor)
+        {
+
+            axRdpClient.UpdateSessionDisplaySettings(ulDesktopWidth, ulDesktopHeight,
+                                                     ulPhysicalWidth, ulPhysicalHeight,
+                                                     ulOrientation,
+                                                     ulDesktopScaleFactor,
+                                                     ulDeviceScaleFactor);
+
+
+        }
+
+
         /// <summary>
         /// Disconnects the active connection.
         /// </summary>
@@ -320,31 +510,6 @@ private MSTSCLib.AutoReconnectContinueState AxRdpClient_OnAutoReconnecting(objec
 
 
 
-
-        #region RDP client event handlers
-        /// <summary>
-        /// Event handler for OnConnecting events from the RDP client control
-        /// </summary>
-        /// <param name="sender">The RDP client control</param>
-        /// <param name="e"> unused parameter</param>
-        private void axRdpClient_OnConnecting(object sender, EventArgs e)
-        {
-            Debug.WriteLine("RemoteDeskTopControl.OnConnecting: EvnetArgs type {0}", e.ToString());
-        }
-
-        /// <summary>
-        /// OnDisconnected event handler
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <remarks>This is needed to translate the parameter</remarks>
-        private void axRdpClient_OnDisconnected(object sender, AxMSTSCLib.IMsTscAxEvents_OnDisconnectedEvent e)
-        {
-            Debug.WriteLine("OnDisconnected event");
-            OnDisconnected(this, new DisconnectEventArgs(e.discReason));
-        }
-        #endregion
-
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
@@ -356,9 +521,5 @@ private MSTSCLib.AutoReconnectContinueState AxRdpClient_OnAutoReconnecting(objec
             }
         }
 
-        private void axRdpClient_OnConnecting_1(object sender, EventArgs e)
-        {
-
-        }
     }
 }

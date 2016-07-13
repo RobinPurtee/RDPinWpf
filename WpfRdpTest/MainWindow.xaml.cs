@@ -47,6 +47,8 @@ namespace WpfRdpTest
         public MainWindow()
         {
             InitializeComponent();
+            Computer = "MININT-7QTTC7";
+            User = "v-ripurt";
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
