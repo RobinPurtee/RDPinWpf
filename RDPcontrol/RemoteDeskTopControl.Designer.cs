@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
 
-namespace RDPcontrol
+namespace RemoteDesktop
 {
-    partial class RemoteDeskTopControl
+    partial class FormHost
     {
         /// <summary> 
         /// Required designer variable.
@@ -35,39 +35,38 @@ namespace RDPcontrol
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RemoteDeskTopControl));
-            this.axRdpClient = new AxMSTSCLib.AxMsRdpClient9NotSafeForScripting();
-            ((System.ComponentModel.ISupportInitialize)(this.axRdpClient)).BeginInit();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHost));
+            this.rdpClient = new AxMSTSCLib.AxMsRdpClient9NotSafeForScripting();
+            ((System.ComponentModel.ISupportInitialize)(this.rdpClient)).BeginInit();
             this.SuspendLayout();
             // 
-            // axRdpClient
+            // rdpClient
             // 
-            this.axRdpClient.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.axRdpClient.Enabled = true;
-            this.axRdpClient.Location = new System.Drawing.Point(0, 0);
-            this.axRdpClient.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.axRdpClient.MaximumSize = new System.Drawing.Size(1280, 702);
-            this.axRdpClient.MinimumSize = new System.Drawing.Size(683, 511);
-            this.axRdpClient.Name = "axRdpClient";
-            this.axRdpClient.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axRdpClient.OcxState")));
-            this.axRdpClient.Size = new System.Drawing.Size(683, 511);
-            this.axRdpClient.TabIndex = 0;
+            this.rdpClient.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rdpClient.Enabled = true;
+            this.rdpClient.Location = new System.Drawing.Point(0, 0);
+            this.rdpClient.Margin = new System.Windows.Forms.Padding(2);
+            this.rdpClient.MaximumSize = new System.Drawing.Size(1920, 1080);
+            this.rdpClient.MinimumSize = new System.Drawing.Size(1024, 786);
+            this.rdpClient.Name = "rdpClient";
+            this.rdpClient.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("rdpClient.OcxState")));
+            this.rdpClient.Size = new System.Drawing.Size(1024, 786);
+            this.rdpClient.TabIndex = 0;
             // 
-            // RemoteDeskTopControl
+            // FormHost
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.axRdpClient);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.Controls.Add(this.rdpClient);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.MaximumSize = new System.Drawing.Size(1920, 1080);
-            this.Name = "RemoteDeskTopControl";
-            this.Size = new System.Drawing.Size(20, 20);
-            ((System.ComponentModel.ISupportInitialize)(this.axRdpClient)).EndInit();
+            this.Name = "FormHost";
+            this.Size = new System.Drawing.Size(1024, 786);
+            ((System.ComponentModel.ISupportInitialize)(this.rdpClient)).EndInit();
             this.ResumeLayout(false);
 
         }
         #endregion
 
-        private AxMSTSCLib.AxMsRdpClient9NotSafeForScripting axRdpClient;
+        private AxMSTSCLib.AxMsRdpClient9NotSafeForScripting rdpClient;
     }
 }
