@@ -20,6 +20,8 @@ namespace WpfRdpTest
     /// </summary>
     public partial class MainWindow : Window
     {
+        RDCHost host;
+
         public string Computer
         {
             get { return (string)GetValue(ComputerProperty); }
@@ -47,7 +49,7 @@ namespace WpfRdpTest
         public MainWindow()
         {
             InitializeComponent();
-            Computer = "MININT-7QTTC7";
+            Computer = "MININT-7SQTTC7";
             User = "v-ripurt";
         }
 
@@ -59,6 +61,8 @@ namespace WpfRdpTest
 
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
+            if(host != null)
+
             Close();
         }
 
@@ -71,9 +75,33 @@ namespace WpfRdpTest
 
         private void ConnectBtn_Click(object sender, RoutedEventArgs e)
         {
-            RDCHost host = new RDCHost(Computer, User);
+            host = new RDCHost(Computer, User);
             host.Owner = this;
-            host.ShowDialog();
+            host.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            host.OnConnected += Host_OnConnected;
+            host.OnDisconnected += Host_OnDisconnected;
+
+            host.Connect();
+            host.Show();
         }
+
+        private void Host_OnDisconnected(object sender, EventArgs e)
+        {
+            ConnectBtn.IsEnabled = true;
+            if (host != null)
+            {
+                host.Close();
+            }
+        }
+
+        private void Host_OnConnected(object sender, EventArgs e)
+        {
+            ConnectBtn.IsEnabled = false;
+            if (host != null)
+            {
+                host.Show();
+            }
+        }
+        
     }
 }

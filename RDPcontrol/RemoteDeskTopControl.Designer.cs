@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace RemoteDesktop
 {
-    partial class FormHost
+    partial class RemoteDesktopControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -35,7 +35,7 @@ namespace RemoteDesktop
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHost));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RemoteDesktopControl));
             this.rdpClient = new AxMSTSCLib.AxMsRdpClient9NotSafeForScripting();
             ((System.ComponentModel.ISupportInitialize)(this.rdpClient)).BeginInit();
             this.SuspendLayout();
@@ -53,13 +53,14 @@ namespace RemoteDesktop
             this.rdpClient.Size = new System.Drawing.Size(1024, 786);
             this.rdpClient.TabIndex = 0;
             // 
-            // FormHost
+            // RemoteDesktopControl
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.BackColor = System.Drawing.SystemColors.Desktop;
             this.Controls.Add(this.rdpClient);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.MaximumSize = new System.Drawing.Size(1920, 1080);
-            this.Name = "FormHost";
+            this.Name = "RemoteDesktopControl";
             this.Size = new System.Drawing.Size(1024, 786);
             ((System.ComponentModel.ISupportInitialize)(this.rdpClient)).EndInit();
             this.ResumeLayout(false);

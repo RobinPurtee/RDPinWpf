@@ -4,11 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfRdpTest"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="RDCHost" Height="1080" Width="1920" 
-        Loaded="HostLoaded"
-        Closing="Window_Closing">
-    <Grid Name="HostGrid">
-        
-    </Grid>
+        Title="Remote Desktop Connection" 
+        Height="786" Width="1024" 
+        Closing="Window_Closing" 
+        Background="{x:Null}" 
+        WindowStartupLocation="CenterScreen" 
+        WindowStyle="ThreeDBorderWindow" 
+        ScrollViewer.CanContentScroll="True">
+    <Window.Resources>
+        <sys:String x:Key="RdpConnectionError" xml:space="preserve">RDP Connection Error</sys:String>
+    </Window.Resources>
+    <WindowsFormsHost Name="FormHost" ChildChanged="FormHost_ChildChanged"/>
 </Window>

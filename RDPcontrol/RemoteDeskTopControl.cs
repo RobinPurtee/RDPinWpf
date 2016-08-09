@@ -5,7 +5,7 @@ using AxMSTSCLib;
 
 namespace RemoteDesktop
 {
-    public partial class FormHost : UserControl
+    public partial class RemoteDesktopControl : UserControl
     {
 
         #region out going events and support classes
@@ -58,7 +58,8 @@ namespace RemoteDesktop
             _MUST_CHANGE = 4615,
             TLM_ONLY = 5895,
             D_CARD_BLOCKED = 8711,
-            D_WRONG_PIN = 7175
+            D_WRONG_PIN = 7175,
+            ConnectionCanceled = 7943
         }
         public class DisconnectEventArgs : EventArgs
         {
@@ -122,7 +123,7 @@ namespace RemoteDesktop
                 OnConfirmClose(sender, new EventArgs());
 
             //TODO: figure system to implement a valid response to this
-            // You would prompt the useer to confirm disconnecton.  
+            // You would prompt the user to confirm disconnecton.  
             //      currently assumne disconnect
             return true;
         }
@@ -342,7 +343,7 @@ namespace RemoteDesktop
                     }
                     catch(System.Windows.Forms.AxHost.InvalidActiveXStateException e)
                     {
-                        Debug.WriteLine("Error while checking connection State: {0}", e.Message);
+                        Debug.WriteLine(string.Format("Error while checking connection State: {0}", e.Message));
                         bRet = false;
                     }
                 }
@@ -368,7 +369,7 @@ namespace RemoteDesktop
         /// <summary>
         /// default constructor
         /// </summary>
-        public FormHost()
+        public RemoteDesktopControl()
         {
             InitializeComponent();
 
@@ -397,8 +398,6 @@ namespace RemoteDesktop
             rdpClient.OnUserNameAcquired += AxRdpClient_OnUserNameAcquired;
             rdpClient.OnWarning += AxRdpClient_OnWarning;
         }
-
-
 
         /// <summary>
         /// Initiates a connection using the properties currently set on the control.
@@ -482,9 +481,9 @@ namespace RemoteDesktop
         /// <param name="disconnectReason">The disconnect reason.</param>
         /// <param name="extendedDisconnectReason">Provides detailed information about why a disconnect was initiated.</param>
         /// <returns></returns>
-        public string GetErrorDescription(uint disconnectReason, uint extendedDisconnectReason)
+        public string GetErrorDescription(uint disconnectReason)
         {
-            return rdpClient.GetErrorDescription(disconnectReason, extendedDisconnectReason);
+            return rdpClient.GetErrorDescription(disconnectReason, (uint)(rdpClient.ExtendedDisconnectReason));
         }
 
         /// <summary>
