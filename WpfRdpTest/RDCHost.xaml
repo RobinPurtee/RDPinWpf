@@ -7,14 +7,32 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Remote Desktop Connection" 
-        Height="786" Width="1024" 
+        Height="125" Width="125" 
         Closing="Window_Closing" 
         Background="{x:Null}" 
-        WindowStartupLocation="CenterScreen" 
-        WindowStyle="ThreeDBorderWindow" 
-        ScrollViewer.CanContentScroll="True">
+        WindowStartupLocation="CenterOwner" 
+        WindowStyle="None" 
+        ScrollViewer.CanContentScroll="True" 
+        IsTabStop="False" 
+        ShowInTaskbar="False" 
+        ResizeMode="NoResize" 
+        >
     <Window.Resources>
         <sys:String x:Key="RdpConnectionError" xml:space="preserve">RDP Connection Error</sys:String>
+        <sys:String x:Key="FullScreenTitle">Full Screen Support</sys:String>
+        <sys:String x:Key="FullScreenMessage" xml:space="preserve">Only full screen mode is supported by Apollo Room 
+Remote Desktop Connection</sys:String>
     </Window.Resources>
-    <WindowsFormsHost Name="FormHost" ChildChanged="FormHost_ChildChanged"/>
+    <Grid>
+        <WindowsFormsHost Name="FormHost" 
+                          ChildChanged="FormHost_ChildChanged"
+                          Visibility="Hidden"
+                          />
+        <aucl:MetroCircleBusyIndicator 
+            xmlns:aucl ="clr-namespace:ApolloUserControlLibrary" 
+            x:Name="Spinner" 
+            ParticleColor="{DynamicResource ApolloBrushes.LBG1}"             
+            >
+        </aucl:MetroCircleBusyIndicator>
+    </Grid>
 </Window>

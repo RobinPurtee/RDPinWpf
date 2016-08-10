@@ -343,7 +343,7 @@ namespace RemoteDesktop
                     }
                     catch(System.Windows.Forms.AxHost.InvalidActiveXStateException e)
                     {
-                        Debug.WriteLine(string.Format("Error while checking connection State: {0}", e.Message));
+                        Trace.WriteLine(string.Format("Error while checking connection State: {0}", e.Message));
                         bRet = false;
                     }
                 }
@@ -362,7 +362,15 @@ namespace RemoteDesktop
             }
         }
 
-
+        public bool FullScreen
+        {
+            get { return IsConnected ? false : rdpClient.FullScreen; }
+            set
+            {
+                if (IsConnected)
+                    rdpClient.FullScreen = value;
+            }
+        }
         #endregion
 
 
@@ -472,7 +480,7 @@ namespace RemoteDesktop
         public void Disconnect()
         {
             if((IsConnected || IsConnecting) && !IsDisposed)
-                rdpClient.Disconnect();
+                RequestClose();
         }
 
         /// <summary>

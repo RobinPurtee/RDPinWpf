@@ -18,13 +18,13 @@
         <Style x:Key="HeaderText" TargetType="TextBlock">
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Foreground" Value="{DynamicResource ApolloBrushes.WH}"/>
+            <Setter Property="Foreground" Value="{StaticResource ApolloBrushes.WH}"/>
             <Setter Property="Margin" Value="10,0,0,0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
         <Style x:Key="LabelText" TargetType="Run">
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Foreground" Value="{DynamicResource ApolloBrushes.WH}"/>
+            <Setter Property="Foreground" Value="{StaticResource ApolloBrushes.WH}"/>
         </Style>
         <Style x:Key="OptionText" TargetType="Run">
             <Setter Property="FontFamily" Value="Segoe UI"/>
@@ -32,7 +32,7 @@
             <Setter Property="Foreground" Value="#FF00AFF0"/>
         </Style>
     </Window.Resources>
-    <Grid Background="{DynamicResource ApolloBrushes.LBG3}">
+    <Grid Background="{StaticResource ApolloBrushes.LBG3}">
         <Grid.RowDefinitions>
             <RowDefinition Height="20*"/>
             <RowDefinition Height="20*"/>
@@ -45,13 +45,13 @@
             <RowDefinition Height="43*"/>
         </Grid.RowDefinitions>
 
-        <Rectangle Grid.Row="0" Stretch="Fill" Fill="{DynamicResource ApolloBrushes.BG1}"/>
-        <Rectangle Grid.Row="1" Stretch="Fill" Fill="{DynamicResource ApolloBrushes.LBG2}"/>
-        <Rectangle Grid.Row="3" Stretch="Fill" Fill="{DynamicResource ApolloBrushes.LBG2}"/>
-        <Rectangle Grid.Row="5" Stretch="Fill" Fill="{DynamicResource ApolloBrushes.LBG2}"/>
-        <Rectangle Grid.Row="7" Stretch="Fill" Fill="{DynamicResource ApolloBrushes.LBG2}"/>
+        <Rectangle Grid.Row="0" Stretch="Fill" Fill="{StaticResource ApolloBrushes.BG1}"/>
+        <Rectangle Grid.Row="1" Stretch="Fill" Fill="{StaticResource ApolloBrushes.LBG2}"/>
+        <Rectangle Grid.Row="3" Stretch="Fill" Fill="{StaticResource ApolloBrushes.LBG2}"/>
+        <Rectangle Grid.Row="5" Stretch="Fill" Fill="{StaticResource ApolloBrushes.LBG2}"/>
+        <Rectangle Grid.Row="7" Stretch="Fill" Fill="{StaticResource ApolloBrushes.LBG2}"/>
         <TextBlock Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <Run Text="Pre-selections" Foreground="{DynamicResource ApolloBrushes.WH}"/>
+                <Run Text="Pre-selections" Foreground="{StaticResource ApolloBrushes.WH}"/>
         </TextBlock>
         <Button x:Name="CloseBtn" Grid.Row="0" Background="Transparent" BorderBrush="{x:Null}" Click="CloseBtn_Click" HorizontalAlignment="Right" Margin="0,0,20,0">
             <Path Width="12.05" Height="12.05" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 387.704,-37.0914L 392.072,-32.682L 396.344,-37.0914L 397.822,-35.37L 393.639,-31.1001L 398.049,-26.6481L 396.344,-25.0414L 392,-29.4268L 387.704,-25.0414L 386.226,-26.6481L 390.442,-30.9995L 385.999,-35.4847L 387.704,-37.0914 Z "/>

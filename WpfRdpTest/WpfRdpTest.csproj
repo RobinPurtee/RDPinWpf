@@ -57,19 +57,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Busy.xaml.cs">
-      <DependentUpon>Busy.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MetroCircleBusyIndicator.xaml.cs">
       <DependentUpon>MetroCircleBusyIndicator.xaml</DependentUpon>
     </Compile>
     <Compile Include="RDCHost.xaml.cs">
       <DependentUpon>RDCHost.xaml</DependentUpon>
     </Compile>
-    <Page Include="Busy.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

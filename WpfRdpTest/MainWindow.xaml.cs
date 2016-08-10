@@ -46,6 +46,19 @@ namespace WpfRdpTest
 
 
 
+
+        public bool IsConnected
+        {
+            get { return (bool)GetValue(IsConnectedProperty); }
+            set { SetValue(IsConnectedProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsConnected.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsConnectedProperty =
+            DependencyProperty.Register("IsConnected", typeof(bool), typeof(MainWindow), new PropertyMetadata(false));
+
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -61,8 +74,7 @@ namespace WpfRdpTest
 
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
-            if(host != null)
-
+            DisconnectHost();
             Close();
         }
 
@@ -75,19 +87,30 @@ namespace WpfRdpTest
 
         private void ConnectBtn_Click(object sender, RoutedEventArgs e)
         {
-            host = new RDCHost(Computer, User);
-            host.Owner = this;
-            host.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            host.OnConnected += Host_OnConnected;
-            host.OnDisconnected += Host_OnDisconnected;
 
-            host.Connect();
-            host.Show();
+            if (IsConnected)
+            {
+                host.GoFullScreen();
+                
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(Computer))
+                {
+
+                }
+                else
+                {
+                    ConnectHost();
+                }
+            }
         }
 
         private void Host_OnDisconnected(object sender, EventArgs e)
         {
-            ConnectBtn.IsEnabled = true;
+            IsConnected = false;
+            IsEnabled = true;
+            ConnectBtnText.Text = "Connect";
             if (host != null)
             {
                 host.Close();
@@ -96,12 +119,47 @@ namespace WpfRdpTest
 
         private void Host_OnConnected(object sender, EventArgs e)
         {
-            ConnectBtn.IsEnabled = false;
+            IsConnected = true;
+            IsEnabled = true;
+            ConnectBtnText.Text = "Restore";
             if (host != null)
             {
                 host.Show();
             }
         }
-        
+
+        /// <summary>
+        /// Create a new host controll and open the connection
+        /// </summary>
+        private void ConnectHost()
+        {
+            if(host != null)
+            {
+                DisconnectHost();
+            }
+
+            host = new RDCHost(Computer, User);
+            host.Owner = this;
+            host.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            host.OnConnected += Host_OnConnected;
+            host.OnDisconnected += Host_OnDisconnected;
+
+            host.Connect();
+            host.Show();
+            IsEnabled = false;
+        }
+
+        /// <summary>
+        /// Disconnect and close the current host control
+        /// </summary>
+        private void DisconnectHost()
+        {
+            if (host != null)
+            {
+                //host.Disconnect();
+                host.Close();
+            }
+        }
+
     }
 }

@@ -12,107 +12,121 @@
         WindowStyle="None" 
         WindowStartupLocation="CenterScreen" 
         ResizeMode="NoResize">
-  <Window.Resources>
-    <Style TargetType="Button">
-      <Setter Property="Template">
-        <Setter.Value>
-          <ControlTemplate TargetType="Button">
-            <Border Name="ButtonBorder"
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="Background" Value="{StaticResource ApolloBrushes.LBG1}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="ButtonBorder"
                     CornerRadius="4"
                     BorderThickness="{TemplateBinding Button.BorderThickness}"
                     BorderBrush="{TemplateBinding Button.BorderBrush}"
                     Background="{TemplateBinding Button.Background}"
                     >
-              <Border.RenderTransform>
-                <ScaleTransform ScaleX="1" ScaleY="1"/>
-              </Border.RenderTransform>
-              <VisualStateManager.VisualStateGroups>
-                <VisualStateGroup x:Name="CommonStates">
-                  <VisualStateGroup.Transitions>
-                    <VisualTransition GeneratedDuration="0:0:0.1"/>
-                  </VisualStateGroup.Transitions>
-                  <VisualState x:Name="Normal"/>
-                  <VisualState x:Name="MouseOver">
-                    <Storyboard>
-                      <DoubleAnimation 
-                        Storyboard.TargetProperty= "(Border.RenderTransform).(ScaleTransform.ScaleX)" 
-                        Storyboard.TargetName="ButtonBorder"
-                        To="1.1"
-                        />
+                            <Border.RenderTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1"/>
+                            </Border.RenderTransform>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition GeneratedDuration="0:0:0.1"/>
+                                    </VisualStateGroup.Transitions>
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <DoubleAnimation 
+                                                Storyboard.TargetProperty= "(Border.RenderTransform).(ScaleTransform.ScaleX)" 
+                                                Storyboard.TargetName="ButtonBorder"
+                                                To="1.1"
+                                                />
 
-                      <DoubleAnimation 
-                        Storyboard.TargetProperty= "(Border.RenderTransform).(ScaleTransform.ScaleY)" 
-                        Storyboard.TargetName="ButtonBorder"
-                        To="1.1"
-                        />
+                                            <DoubleAnimation 
+                                                Storyboard.TargetProperty= "(Border.RenderTransform).(ScaleTransform.ScaleY)" 
+                                                Storyboard.TargetName="ButtonBorder"
+                                                To="1.1"
+                                                />
 
-                    </Storyboard>
-                  </VisualState>
-                  <VisualState x:Name="Pressed">
-                    <Storyboard>
-                      <DoubleAnimation 
-                        Storyboard.TargetProperty= "(Border.RenderTransform).(ScaleTransform.ScaleX)" 
-                        Storyboard.TargetName="ButtonBorder"
-                        To="0.9"
-                        />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <DoubleAnimation 
+                                                Storyboard.TargetProperty= "(Border.RenderTransform).(ScaleTransform.ScaleX)" 
+                                                Storyboard.TargetName="ButtonBorder"
+                                                To="0.9"
+                                                />
 
-                      <DoubleAnimation 
-                        Storyboard.TargetProperty= "(Border.RenderTransform).(ScaleTransform.ScaleY)" 
-                        Storyboard.TargetName="ButtonBorder"
-                        To="0.9"
-                        />
+                                            <DoubleAnimation 
+                                                Storyboard.TargetProperty= "(Border.RenderTransform).(ScaleTransform.ScaleY)" 
+                                                Storyboard.TargetName="ButtonBorder"
+                                                To="0.9"
+                                                />
 
-                    </Storyboard>
-                  </VisualState>
-                  <VisualState x:Name="Disabled"/>
-                </VisualStateGroup>
-              </VisualStateManager.VisualStateGroups>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled"/>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
 
-              <ContentPresenter Content="{TemplateBinding Button.Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </Border>
-          </ControlTemplate>
-        </Setter.Value>
-      </Setter>
-    </Style>
-  </Window.Resources>
-  <Grid Background="{DynamicResource ApolloBrushes.LBG3}">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="92*"/>
-      <ColumnDefinition Width="126*"/>
-      <ColumnDefinition Width="85*"/>
-      <ColumnDefinition Width="85*"/>
-      <ColumnDefinition Width="24*"/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="77*"/>
-      <RowDefinition Height="13*"/>
-      <RowDefinition Height="35*"/>
-      <RowDefinition Height="35*"/>
-      <RowDefinition Height="35*"/>
-      <RowDefinition Height="55*"/>
-    </Grid.RowDefinitions>
-    <!-- The background for the top of the dialog -->
-    <Border Grid.Row="0" Grid.ColumnSpan="5" 
+                            <ContentPresenter Content="{TemplateBinding Button.Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Background" Value="{StaticResource ApolloBrushes.BG3}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ApolloBrushes.LBG2}"/>
+            <Setter Property="Foreground" Value="{StaticResource ApolloBrushes.WH}"/>
+        </Style>
+        <Style x:Key="ButtonTextStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{StaticResource ApolloBrushes.BG3}"/>
+
+        </Style>
+    </Window.Resources>
+    <Grid Background="{StaticResource ApolloBrushes.LBG3}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="92*"/>
+            <ColumnDefinition Width="126*"/>
+            <ColumnDefinition Width="85*"/>
+            <ColumnDefinition Width="85*"/>
+            <ColumnDefinition Width="24*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="77*"/>
+            <RowDefinition Height="13*"/>
+            <RowDefinition Height="35*"/>
+            <RowDefinition Height="35*"/>
+            <RowDefinition Height="35*"/>
+            <RowDefinition Height="55*"/>
+        </Grid.RowDefinitions>
+        <!-- The background for the top of the dialog -->
+        <Border Grid.Row="0" Grid.ColumnSpan="5" 
                 BorderThickness="0,0,0,1"
                 Background="{StaticResource ApolloBrushes.BG1}">
-      <Border.BorderBrush>
-        <SolidColorBrush Color="{DynamicResource RemoteDeskTopPalette.BorderLine}"/>
-      </Border.BorderBrush>
-    </Border>
-    <!-- The logo at the top -->
-    <Viewbox Width="51.8507" Height="47.1066" Grid.Row="0" Grid.Column="0">
-      <Canvas Width="51.8507" Height="47.1066">
-        <Viewbox Width="44.9724" Height="25.2149" Canvas.Left="0" Canvas.Top="21.8917">
-          <Canvas Width="44.9724" Height="25.2149">
-            <Path  Width="32.4192" Height="25.2149" Canvas.Left="12.5532" Canvas.Top="0" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 14.2595,0L 43.0765,0C 44.214,0 44.9724,0.877014 44.9724,1.97328L 44.9724,19.5137C 44.9724,20.61 44.214,21.7063 43.0765,21.7063L 33.5647,21.7063L 32.2605,21.7063L 32.2605,23.0328L 32.2605,23.907L 36.4369,23.907L 38.0006,25.2149L 19.4254,25.2149L 21.0887,23.907L 25.0824,23.907L 25.0824,23.0328L 25.0824,21.7063L 23.6236,21.7063L 14.2595,21.7063C 13.3116,21.7063 12.5532,20.61 12.5532,19.5137L 12.5532,1.97328C 12.5532,0.877014 13.3116,0 14.2595,0 Z M 15.5882,2.661C 15.4613,2.661 15.3583,2.76393 15.3583,2.89091L 15.3583,18.8206C 15.3583,18.9476 15.4613,19.0506 15.5882,19.0506L 41.7708,19.0506C 41.8978,19.0506 42.0007,18.9476 42.0007,18.8206L 42.0007,2.89091C 42.0007,2.76393 41.8978,2.661 41.7708,2.661L 15.5882,2.661 Z "/>
-            <Path  Width="11.2258" Height="22.9254" Canvas.Left="1.33514e-005" Canvas.Top="1.25708" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 10.4385,1.25708C 10.8733,1.25708 11.2258,1.41705 11.2258,1.6144L 11.2258,23.8251C 11.2258,24.0225 10.8733,24.1825 10.4385,24.1825L 0.787373,24.1825C 0.352522,24.1825 1.33514e-005,24.0225 1.33514e-005,23.8251L 1.33514e-005,1.6144C 1.33514e-005,1.41705 0.352522,1.25708 0.787373,1.25708L 10.4385,1.25708 Z M 1.82619,3.10303C 1.69922,3.10303 1.59627,3.20598 1.59627,3.33295L 1.59627,5.56728C 1.59627,5.69427 1.69922,5.7972 1.82619,5.7972L 9.64844,5.7972C 9.77541,5.7972 9.87836,5.69427 9.87836,5.56728L 9.87836,3.33295C 9.87836,3.20598 9.77541,3.10303 9.64844,3.10303L 1.82619,3.10303 Z M 2.26548,16.7535C 2.1385,16.7535 2.03555,16.8565 2.03555,16.9835L 2.03555,17.5575C 2.03555,17.6845 2.1385,17.7874 2.26548,17.7874L 9.13977,17.7874C 9.26674,17.7874 9.3697,17.6845 9.3697,17.5575L 9.3697,16.9835C 9.3697,16.8565 9.26674,16.7535 9.13977,16.7535L 2.26548,16.7535 Z M 2.26552,18.7783C 2.13855,18.7783 2.0356,18.8812 2.0356,19.0082L 2.0356,19.5822C 2.0356,19.7092 2.13855,19.8121 2.26552,19.8121L 9.13982,19.8121C 9.26679,19.8121 9.36974,19.7092 9.36974,19.5822L 9.36974,19.0082C 9.36974,18.8812 9.26679,18.7783 9.13982,18.7783L 2.26552,18.7783 Z M 2.26557,20.8461C 2.1386,20.8461 2.03565,20.949 2.03565,21.076L 2.03565,21.65C 2.03565,21.777 2.1386,21.88 2.26557,21.88L 9.13987,21.88C 9.26684,21.88 9.36979,21.777 9.36979,21.65L 9.36979,21.076C 9.36979,20.949 9.26684,20.8461 9.13987,20.8461L 2.26557,20.8461 Z "/>
-          </Canvas>
+            <Border.BorderBrush>
+                <SolidColorBrush Color="{StaticResource RemoteDeskTopPalette.BorderLine}"/>
+            </Border.BorderBrush>
+        </Border>
+        <!-- The logo at the top -->
+        <Viewbox Width="51.8507" Height="47.1066" Grid.Row="0" Grid.Column="0">
+            <Canvas Width="51.8507" Height="47.1066">
+                <Viewbox Width="44.9724" Height="25.2149" Canvas.Left="0" Canvas.Top="21.8917">
+                    <Canvas Width="44.9724" Height="25.2149">
+                        <Path  Width="32.4192" Height="25.2149" Canvas.Left="12.5532" Canvas.Top="0" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 14.2595,0L 43.0765,0C 44.214,0 44.9724,0.877014 44.9724,1.97328L 44.9724,19.5137C 44.9724,20.61 44.214,21.7063 43.0765,21.7063L 33.5647,21.7063L 32.2605,21.7063L 32.2605,23.0328L 32.2605,23.907L 36.4369,23.907L 38.0006,25.2149L 19.4254,25.2149L 21.0887,23.907L 25.0824,23.907L 25.0824,23.0328L 25.0824,21.7063L 23.6236,21.7063L 14.2595,21.7063C 13.3116,21.7063 12.5532,20.61 12.5532,19.5137L 12.5532,1.97328C 12.5532,0.877014 13.3116,0 14.2595,0 Z M 15.5882,2.661C 15.4613,2.661 15.3583,2.76393 15.3583,2.89091L 15.3583,18.8206C 15.3583,18.9476 15.4613,19.0506 15.5882,19.0506L 41.7708,19.0506C 41.8978,19.0506 42.0007,18.9476 42.0007,18.8206L 42.0007,2.89091C 42.0007,2.76393 41.8978,2.661 41.7708,2.661L 15.5882,2.661 Z "/>
+                        <Path  Width="11.2258" Height="22.9254" Canvas.Left="1.33514e-005" Canvas.Top="1.25708" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 10.4385,1.25708C 10.8733,1.25708 11.2258,1.41705 11.2258,1.6144L 11.2258,23.8251C 11.2258,24.0225 10.8733,24.1825 10.4385,24.1825L 0.787373,24.1825C 0.352522,24.1825 1.33514e-005,24.0225 1.33514e-005,23.8251L 1.33514e-005,1.6144C 1.33514e-005,1.41705 0.352522,1.25708 0.787373,1.25708L 10.4385,1.25708 Z M 1.82619,3.10303C 1.69922,3.10303 1.59627,3.20598 1.59627,3.33295L 1.59627,5.56728C 1.59627,5.69427 1.69922,5.7972 1.82619,5.7972L 9.64844,5.7972C 9.77541,5.7972 9.87836,5.69427 9.87836,5.56728L 9.87836,3.33295C 9.87836,3.20598 9.77541,3.10303 9.64844,3.10303L 1.82619,3.10303 Z M 2.26548,16.7535C 2.1385,16.7535 2.03555,16.8565 2.03555,16.9835L 2.03555,17.5575C 2.03555,17.6845 2.1385,17.7874 2.26548,17.7874L 9.13977,17.7874C 9.26674,17.7874 9.3697,17.6845 9.3697,17.5575L 9.3697,16.9835C 9.3697,16.8565 9.26674,16.7535 9.13977,16.7535L 2.26548,16.7535 Z M 2.26552,18.7783C 2.13855,18.7783 2.0356,18.8812 2.0356,19.0082L 2.0356,19.5822C 2.0356,19.7092 2.13855,19.8121 2.26552,19.8121L 9.13982,19.8121C 9.26679,19.8121 9.36974,19.7092 9.36974,19.5822L 9.36974,19.0082C 9.36974,18.8812 9.26679,18.7783 9.13982,18.7783L 2.26552,18.7783 Z M 2.26557,20.8461C 2.1386,20.8461 2.03565,20.949 2.03565,21.076L 2.03565,21.65C 2.03565,21.777 2.1386,21.88 2.26557,21.88L 9.13987,21.88C 9.26684,21.88 9.36979,21.777 9.36979,21.65L 9.36979,21.076C 9.36979,20.949 9.26684,20.8461 9.13987,20.8461L 2.26557,20.8461 Z "/>
+                    </Canvas>
+                </Viewbox>
+                <Path Width="47.2234" Height="33.2357" Canvas.Left="4.62724" Canvas.Top="0" Stretch="Fill" Fill="#FFFFFFFF" Data="M 51.831,28.8812C 51.8311,32.2747 51.4738,32.9982 47.7393,32.9982L 43.4066,33.0074L 43.3935,29.2755L 47.9348,29.278L 47.9758,3.67924L 8.60736,3.63016L 8.57554,24.8537L 4.62724,24.8365L 4.63318,4.33568C 4.63323,0.529205 5.05532,0.0211487 9.22258,0.0211487L 47.6476,0C 51.0487,0 51.8507,0.695801 51.8507,4.25388L 51.831,28.8812 Z M 12.8302,29.3442L 12.8302,33.2357L 10.0362,33.2357L 10.0362,29.3442L 12.8302,29.3442 Z "/>
+            </Canvas>
         </Viewbox>
-        <Path Width="47.2234" Height="33.2357" Canvas.Left="4.62724" Canvas.Top="0" Stretch="Fill" Fill="#FFFFFFFF" Data="M 51.831,28.8812C 51.8311,32.2747 51.4738,32.9982 47.7393,32.9982L 43.4066,33.0074L 43.3935,29.2755L 47.9348,29.278L 47.9758,3.67924L 8.60736,3.63016L 8.57554,24.8537L 4.62724,24.8365L 4.63318,4.33568C 4.63323,0.529205 5.05532,0.0211487 9.22258,0.0211487L 47.6476,0C 51.0487,0 51.8507,0.695801 51.8507,4.25388L 51.831,28.8812 Z M 12.8302,29.3442L 12.8302,33.2357L 10.0362,33.2357L 10.0362,29.3442L 12.8302,29.3442 Z "/>
-      </Canvas>
-    </Viewbox>
-    <!-- The 'Remote Desktop' text at top -->
-    <TextBlock 
+        <!-- The 'Remote Desktop' text at top -->
+        <TextBlock 
             TextAlignment="Left" 
             FontFamily="Segoe UI" 
             FontSize="26" 
@@ -121,9 +135,9 @@
             Margin="0,9,0,0">
             <Run Text="Remote Desktop" Foreground="{StaticResource BannerTextBrush}"/>
 
-    </TextBlock>
-    <!-- The 'Connection' text at the top -->
-    <TextBlock  
+        </TextBlock>
+        <!-- The 'Connection' text at the top -->
+        <TextBlock  
             TextAlignment="Left" 
             FontFamily="Segoe UI Semibold" 
             FontWeight="Bold" 
@@ -133,8 +147,8 @@
             >
             <Run Text="Connection" Foreground="{StaticResource BannerTextBrush}"/>
 
-    </TextBlock>
-    <TextBlock Text="Computer:"
+        </TextBlock>
+        <TextBlock Text="Computer:"
                    Grid.Row="2" Grid.Column="0" 
                    HorizontalAlignment="Right" VerticalAlignment="Center" 
                    Margin="0,0,10,0"
@@ -142,52 +156,58 @@
                    Foreground="{StaticResource ApolloBrushes.WH}"
                    
                    />
-    <TextBox x:Name="ComputerName" 
-                 Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" 
-                 Margin="0,5" 
-                 Text="{Binding Path=Computer}"
-                 />
-    <TextBlock Text="User Name:"
+        <TextBox x:Name="ComputerName" 
+             Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" 
+             Text="{Binding Path=Computer}" 
+             TabIndex="0"
+             />
+        <TextBlock Text="User Name:"
                    Grid.Row="3" Grid.Column="0" 
                    HorizontalAlignment="Right" VerticalAlignment="Center" 
                    Margin="0,0,10,0"
                    FontSize="12"
                    Foreground="{StaticResource ApolloBrushes.WH}"
                    />
-    <TextBox x:Name="UserName" 
+        <TextBox x:Name="UserName" 
                  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" 
-                 Margin="0,5" 
-                 Text="{Binding Path=User}"
-                 />
-    <Button x:Name="ConnectBtn" 
+                 Text="{Binding Path=User}" TabIndex="1" 
+                 >
+            <TextBox.BorderBrush>
+                <SolidColorBrush Color="{StaticResource ApolloColorPalette.LBG2}"/>
+            </TextBox.BorderBrush>
+        </TextBox>
+        <Button x:Name="ConnectBtn" 
                 Width="70" Height="30" 
                 Grid.Row="5" Grid.Column="2" 
                 Background="{StaticResource ApolloBrushes.WH}"
                 BorderThickness="0"
-                Click="ConnectBtn_Click"
+                Click="ConnectBtn_Click" 
+                TabIndex="2" 
                 >
-      <TextBlock FontFamily="Segoe UI" FontSize="12" Foreground="{StaticResource ApolloBrushes.BG3}" Text="Connect"/>
-    </Button>
+            <TextBlock x:Name="ConnectBtnText" 
+                       Style="{StaticResource ButtonTextStyle}"
+                       Text="Connect"/>
+        </Button>
 
-    <Button x:Name="CloseBtn" 
+        <Button x:Name="CloseBtn" 
                 Width="70" Height="30" 
                 Grid.Row="5" Grid.Column="3" 
-                Background="{StaticResource ApolloBrushes.LBG1}"
-                Click="CloseBtn_Click"
+                Click="CloseBtn_Click" 
+                TabIndex="3"
                 >
-      <TextBlock FontFamily="Segoe UI" FontSize="12" Foreground="{StaticResource ApolloBrushes.BG3}" Text="Close"/>
-    </Button>
+            <TextBlock Style="{StaticResource ButtonTextStyle}" Text="Close"/>
+        </Button>
 
-    <Button x:Name="PreSelectBtn" 
+        <Button x:Name="PreSelectBtn" 
                 Width="91" Height="30" 
                 Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" 
                 Margin="23,0,0,0" 
                 HorizontalAlignment="Left" VerticalAlignment="Center" BorderThickness="0"
-                Background="{StaticResource ApolloBrushes.LBG1}"
-                Click="PreSelectBtn_Click"
+                Click="PreSelectBtn_Click" 
+                TabIndex="4" 
                 >
-      <TextBlock FontFamily="Segoe UI" FontSize="12" Foreground="{StaticResource ApolloBrushes.BG3}" Text="Pre-selections"/>
-    </Button>
+            <TextBlock Style="{StaticResource ButtonTextStyle}" Text="Pre-selections"/>
+        </Button>
 
-  </Grid>
+    </Grid>
 </Window>
