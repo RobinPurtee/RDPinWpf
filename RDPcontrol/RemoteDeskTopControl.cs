@@ -5,62 +5,106 @@ using AxMSTSCLib;
 
 namespace RemoteDesktop
 {
+    public enum DisconnectReason : int
+    {
+        SocketClosed = 2308,
+        ByServer = 3,
+        ClientDecompressionError = 3080,
+        ConnectionTimedOut = 264,
+        DecryptionError = 3078,
+        DNSLookupFailed = 260,
+        DNSLookupFailed2 = 1288,
+        EncryptionError = 2822,
+        GetHostByNameFailed = 1540,
+        HostNotFound = 520,
+        InternalError = 1032,
+        InternalSecurityError = 2310,
+        InternalSecurityError2 = 2566,
+        InvalidEncryption = 1286,
+        InvalidIP = 2052,
+        InvalidServerSecurityInfo = 1542,
+        InvalidSecurityData = 1030,
+        InvalidIPAddr = 776,
+        LicensingFailed = 2056,
+        LicensingTimeout = 2312,
+        LocalNotError = 1,
+        NoInfo = 0,
+        OutOfMemory = 262,
+        OutOfMemory2 = 518,
+        OutOfMemory3 = 774,
+        RemoteByUser = 2,
+        ServerCertificateUnpackErr = 1798,
+        SocketConnectFailed = 516,
+        SocketRecvFailed = 1028,
+        TimeoutOccurred = 1796,
+        TimerError = 1544,
+        WinsockSendFailed = 772,
+        DISABLED = 2823,
+        EXPIRED = 3591,
+        LOCKED_OUT = 3335,
+        RESTRICTION = 3079,
+        IRED = 6919,
+        ON_POLICY = 5639,
+        ED_REQUIRED_BY_SERVER = 8455,
+        ILURE = 2055,
+        NTICATING_AUTHORITY = 6151,
+        USER = 2567,
+        _EXPIRED = 3847,
+        _MUST_CHANGE = 4615,
+        TLM_ONLY = 5895,
+        D_CARD_BLOCKED = 8711,
+        D_WRONG_PIN = 7175,
+        ConnectionCanceled = 7943
+    }
+
+    public enum FatalErrorType
+    {
+        Unknown = 0,
+        Internal_1 = 1,
+        OutOfMemory = 2,
+        WindowCreation = 3,
+        Internal_2 = 4,
+        Internal_3 = 5,
+        Internal_4 = 6,
+        Unrecoverable = 7,
+        Winsock = 100
+    };
+
+    public enum LogonErrorType
+    {
+
+        ARBITRATION_CODE_BUMP_OPTIONS = -5,         //Winlogon is displaying the Session Contention dialog box.
+        ARBITRATION_CODE_CONTINUE_LOGON = -2,       //Winlogon is continuing with the logon process.
+        ARBITRATION_CODE_CONTINUE_TERMINATE = -3,   //Winlogon is ending silently.
+        ARBITRATION_CODE_NOPERM_DIALOG = -6,        //Winlogon is displaying the No Permissions dialog box.
+        ARBITRATION_CODE_REFUSED_DIALOG = -7,       //Winlogon is displaying the Disconnect Refused dialog box.
+        ARBITRATION_CODE_RECONN_OPTIONS = -4,       //Winlogon is displaying the Reconnect dialog box.
+        ERROR_CODE_ACCESS_DENIED = -1,              //The user was denied access.
+        LOGON_FAILED_BAD_PASSWORD = 0,              //The logon failed because the logon credentials are not valid.
+        LOGON_FAILED_UPDATE_PASSWORD = 1,           //The password is expired. The user must update their password to continue logging on. 
+        LOGON_FAILED_OTHER = 2,                     //Another logon or post-logon error occurred. The Remote Desktop client displays a logon screen to the user.
+        LOGON_WARNING = 3,                          //The Remote Desktop client displays a dialog box that contains important information for the user.
+        STATUS_ACCOUNT_RESTRICTION = -1073741714,   //The user name and authentication information are valid, but authentication was blocked due to restrictions on the user account, such as time-of-day restrictions.
+        STATUS_LOGON_FAILURE = -1073741715,         //The attempted logon is not valid. This is due to either an incorrect user name or incorrect authentication information.
+        STATUS_PASSWORD_MUST_CHANGE = -1073741276   //The password is expired. The user must update their password to continue logging on.
+    }
+
+    public enum WarningType
+    {
+        bitmapCorrupt = 1      //Bitmap cache is corrupt
+    }
+
+    public enum ConnectionStatusEnum : short
+    {
+        Disconnected = 0,
+        Connected = 1,
+        Connecting = 2
+    }
     public partial class RemoteDesktopControl : UserControl
     {
 
         #region out going events and support classes
         #region Disconnected
-        public enum DisconnectReason : int
-        {
-            SocketClosed = 2308,
-            ByServer = 3,
-            ClientDecompressionError = 3080,
-            ConnectionTimedOut = 264,
-            DecryptionError = 3078,
-            DNSLookupFailed = 260,
-            DNSLookupFailed2 = 1288,
-            EncryptionError = 2822,
-            GetHostByNameFailed = 1540,
-            HostNotFound = 520,
-            InternalError = 1032,
-            InternalSecurityError = 2310,
-            InternalSecurityError2 = 2566,
-            InvalidEncryption = 1286,
-            InvalidIP = 2052,
-            InvalidServerSecurityInfo = 1542,
-            InvalidSecurityData = 1030,
-            InvalidIPAddr = 776,
-            LicensingFailed = 2056,
-            LicensingTimeout = 2312,
-            LocalNotError = 1,
-            NoInfo = 0,
-            OutOfMemory = 262,
-            OutOfMemory2 = 518,
-            OutOfMemory3 = 774,
-            RemoteByUser = 2,
-            ServerCertificateUnpackErr = 1798,
-            SocketConnectFailed = 516,
-            SocketRecvFailed = 1028,
-            TimeoutOccurred = 1796,
-            TimerError = 1544,
-            WinsockSendFailed = 772,
-            DISABLED = 2823,
-            EXPIRED = 3591,
-            LOCKED_OUT = 3335,
-            RESTRICTION = 3079,
-            IRED = 6919,
-            ON_POLICY = 5639,
-            ED_REQUIRED_BY_SERVER = 8455,
-            ILURE = 2055,
-            NTICATING_AUTHORITY = 6151,
-            USER = 2567,
-            _EXPIRED = 3847,
-            _MUST_CHANGE = 4615,
-            TLM_ONLY = 5895,
-            D_CARD_BLOCKED = 8711,
-            D_WRONG_PIN = 7175,
-            ConnectionCanceled = 7943
-        }
         public class DisconnectEventArgs : EventArgs
         {
             public DisconnectReason reason;
@@ -109,7 +153,7 @@ namespace RemoteDesktop
             }
         }
         public delegate void AutoReconnectingEventHandler(object sender, AutoReconnectingEventArgs args);
-        public event AutoReconnectingEventHandler OnAutoReconnecting;
+        public event EventHandler<AutoReconnectingEventArgs> OnAutoReconnecting;
         private void AxRdpClient_OnAutoReconnecting(object sender, IMsTscAxEvents_OnAutoReconnecting2Event args)
         {
             if(OnAutoReconnecting != null)
@@ -153,18 +197,6 @@ namespace RemoteDesktop
             remove { rdpClient.OnEnterFullScreenMode -= value; }
         }
         #region OnFatalError
-        public enum FatalErrorType 
-        {
-            Unknown = 0,
-            Internal_1 = 1,
-            OutOfMemory = 2,
-            WindowCreation = 3,
-            Internal_2 = 4,
-            Internal_3 = 5,
-            Internal_4 = 6,
-            Unrecoverable = 7,
-            Winsock = 100
-        };
         public class FatalErrorEventArgs : EventArgs
         {
             public FatalErrorType error;
@@ -200,24 +232,6 @@ namespace RemoteDesktop
             remove { rdpClient.OnLoginComplete -= value; }
         }
         #region Logon Error
-        public enum LogonErrorType
-        {
-
-            ARBITRATION_CODE_BUMP_OPTIONS = -5,         //Winlogon is displaying the Session Contention dialog box.
-            ARBITRATION_CODE_CONTINUE_LOGON = -2,       //Winlogon is continuing with the logon process.
-            ARBITRATION_CODE_CONTINUE_TERMINATE = -3,   //Winlogon is ending silently.
-            ARBITRATION_CODE_NOPERM_DIALOG = -6,        //Winlogon is displaying the No Permissions dialog box.
-            ARBITRATION_CODE_REFUSED_DIALOG = -7,       //Winlogon is displaying the Disconnect Refused dialog box.
-            ARBITRATION_CODE_RECONN_OPTIONS = -4,       //Winlogon is displaying the Reconnect dialog box.
-            ERROR_CODE_ACCESS_DENIED = -1,              //The user was denied access.
-            LOGON_FAILED_BAD_PASSWORD = 0,              //The logon failed because the logon credentials are not valid.
-            LOGON_FAILED_UPDATE_PASSWORD = 1,           //The password is expired. The user must update their password to continue logging on. 
-            LOGON_FAILED_OTHER = 2,                     //Another logon or post-logon error occurred. The Remote Desktop client displays a logon screen to the user.
-            LOGON_WARNING = 3,                          //The Remote Desktop client displays a dialog box that contains important information for the user.
-            STATUS_ACCOUNT_RESTRICTION = -1073741714,   //The user name and authentication information are valid, but authentication was blocked due to restrictions on the user account, such as time-of-day restrictions.
-            STATUS_LOGON_FAILURE = -1073741715,         //The attempted logon is not valid. This is due to either an incorrect user name or incorrect authentication information.
-            STATUS_PASSWORD_MUST_CHANGE = -1073741276   //The password is expired. The user must update their password to continue logging on.
-        }
         public class LogonErrorEvent : EventArgs
         {
             public LogonErrorType error;
@@ -298,10 +312,6 @@ namespace RemoteDesktop
         }
         #endregion
         #region Warning event
-        public enum WarningType
-        {
-            bitmapCorrupt  = 1      //Bitmap cache is corrupt
-        }
         public class WarningEvent : EventArgs
         {
             public WarningType warning;
@@ -321,12 +331,6 @@ namespace RemoteDesktop
         #endregion
 
         #region Public properties
-        public enum ConnectionStatusEnum : short
-        {
-            Disconnected = 0,
-            Connected = 1,
-            Connecting = 2
-        }
         /// <summary>
         /// Test if there is currently a connected session
         /// </summary>
@@ -335,13 +339,13 @@ namespace RemoteDesktop
             get
             {
                 bool bRet = rdpClient != null;
-                if(bRet)
+                if (bRet)
                 {
                     try
                     {
                         bRet = (ConnectionStatusEnum)rdpClient.Connected == ConnectionStatusEnum.Connected;
                     }
-                    catch(System.Windows.Forms.AxHost.InvalidActiveXStateException e)
+                    catch (System.Windows.Forms.AxHost.InvalidActiveXStateException e)
                     {
                         Trace.WriteLine(string.Format("Error while checking connection State: {0}", e.Message));
                         bRet = false;
@@ -487,11 +491,13 @@ namespace RemoteDesktop
         /// Retrieves the error description for the session disconnect events
         /// </summary>
         /// <param name="disconnectReason">The disconnect reason.</param>
-        /// <param name="extendedDisconnectReason">Provides detailed information about why a disconnect was initiated.</param>
-        /// <returns></returns>
+        /// <returns>String of the current disconnection reason or an empty string if the control is not hosting a connection</returns>
         public string GetErrorDescription(uint disconnectReason)
         {
-            return rdpClient.GetErrorDescription(disconnectReason, (uint)(rdpClient.ExtendedDisconnectReason));
+            string ret = string.Empty;
+            if(rdpClient != null)
+                ret = rdpClient.GetErrorDescription(disconnectReason, (uint)(rdpClient.ExtendedDisconnectReason));
+            return ret;
         }
 
         /// <summary>

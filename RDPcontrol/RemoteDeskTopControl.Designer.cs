@@ -45,7 +45,7 @@ namespace RemoteDesktop
             this.rdpClient.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rdpClient.Enabled = true;
             this.rdpClient.Location = new System.Drawing.Point(0, 0);
-            this.rdpClient.Margin = new System.Windows.Forms.Padding(2);
+            this.rdpClient.Margin = new System.Windows.Forms.Padding(0);
             this.rdpClient.MaximumSize = new System.Drawing.Size(1920, 1080);
             this.rdpClient.MinimumSize = new System.Drawing.Size(1024, 786);
             this.rdpClient.Name = "rdpClient";

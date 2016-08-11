@@ -54,8 +54,6 @@ namespace ApolloUserControlLibrary
     {
         private DoubleAnimation animation;
         private RotateTransform transform;
-        private UIElement element;
-
 
         public Animation(UIElement element, TimeSpan startTime )
         {

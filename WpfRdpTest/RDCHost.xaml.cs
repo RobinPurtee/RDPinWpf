@@ -21,18 +21,31 @@ namespace WpfRdpTest
         private RemoteDesktopControl rdpControl;
 
         public event EventHandler OnConnected;
-        public event EventHandler OnDisconnected;
+        public event EventHandler<RemoteDesktopControl.DisconnectEventArgs> OnDisconnected;
+        public event EventHandler OnStartWaiting;
+        public event EventHandler OnStopWaiting;
 
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
         public RDCHost()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Initializing Constructor
+        /// </summary>
+        /// <param name="computer">The Remote Desktop server</param>
+        /// <param name="user">The user name to login with</param>
         public RDCHost(string computer, string user) : this()
         {
             ComputerName = computer;
             User = user;
         }
+
+
+
 
 
         #region RDP Conntrol event handlers
@@ -44,7 +57,10 @@ namespace WpfRdpTest
         private void RdpControl_OnAuthenticationWarningDisplayed(object sender, EventArgs e)
         {
             Trace.WriteLine("RdpControl_OnAuthenticationWarningDisplayed ");
-            CloseSpinner();
+            if (OnStopWaiting != null)
+            {
+                OnStopWaiting(this, new EventArgs());
+            }
         }
 
         private void RdpControl_OnAutoReconnected(object sender, EventArgs e)
@@ -70,51 +86,41 @@ namespace WpfRdpTest
         private void RdpControl_OnConnected(object sender, EventArgs e)
         {
             Trace.WriteLine("RdpControl_OnConnected called");
+            if (OnStopWaiting != null)
+            {
+                OnStopWaiting(this, new EventArgs());
+            }
             if (OnConnected != null)
             {
                 OnConnected(this, new EventArgs());
             }
-            CloseSpinner();
         }
 
         private void RdpControl_OnConnecting(object sender, EventArgs e)
         {
             Trace.WriteLine("RdpControl_OnConnecting called");
-            DisplaySpinner();
-        }
-
-        private void RdpControl_OnFatalError(object sender, RemoteDesktopControl.FatalErrorEventArgs args)
-        {
-            Trace.WriteLine("RdpControl_OnFatalError with error:" + args.error.ToString());
+            if (OnStartWaiting != null)
+            {
+                OnStartWaiting(this, new EventArgs());
+            }
         }
 
         private void RdpControl_OnDisconnected(object sender, RemoteDesktopControl.DisconnectEventArgs args)
         {
             Trace.WriteLine("RdpControl_OnDisconnected with reason: " + args.reason.ToString());
-            CloseSpinner();
-
-            switch(args.reason)
+            if (OnStopWaiting != null)
             {
-                // filter non-error resons for disconnection
-                case RemoteDesktopControl.DisconnectReason.LocalNotError:
-                case RemoteDesktopControl.DisconnectReason.ConnectionCanceled:
-                    break;
-                default:
-                    string errorMesssage = rdpControl.GetErrorDescription((uint)(args.reason));
-                    MessageBox.Show(errorMesssage, (string)FindResource("RdpConnectionError"), MessageBoxButton.OK);
-                    break;
+                OnStopWaiting(this, new EventArgs());
             }
-            // once the connection is closed, delete the control
-            if(!rdpControl.IsDisposed)
-            {
-                rdpControl.Dispose();
-                rdpControl = null;
-            }
-
             if (OnDisconnected != null)
             {
-                OnDisconnected(this, new EventArgs());
+                OnDisconnected(this, args);
             }
+        }
+
+        private void RdpControl_OnFatalError(object sender, RemoteDesktopControl.FatalErrorEventArgs args)
+        {
+            Trace.WriteLine("RdpControl_OnFatalError with error:" + args.error.ToString());
         }
 
 
@@ -132,7 +138,7 @@ namespace WpfRdpTest
         {
             Trace.WriteLine("RdpControl_OnLeaveFullScreenMode ");
             // if not disconnecting display a toast
-            rdpControl.FullScreen = true;
+            //rdpControl.FullScreen = true;
         }
 
         private void RdpControl_OnLoginComplete(object sender, EventArgs e)
@@ -172,6 +178,11 @@ namespace WpfRdpTest
         }
         #endregion
 
+        /// <summary>
+        /// Window Closing handler
+        /// </summary>
+        /// <param name="sender">message sender</param>
+        /// <param name="e">EventArgs that allows the action to be canceled</param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Disconnect();
@@ -185,34 +196,9 @@ namespace WpfRdpTest
             }
         }
 
-        private void FormHost_ChildChanged(object sender, ChildChangedEventArgs e)
-        {
-            Trace.WriteLine("FormHost_ChildChanged called ");
-            if (e.PreviousChild != null)
-            {
-                Trace.WriteLine("FormHost_ChildChanged args: " + e.PreviousChild.ToString());
-            }
-        }
+ 
 
-
-        private void DisplaySpinner()
-        {
-            Visibility = Visibility.Visible;
-            Spinner.Visibility = Visibility.Visible;
-            Spinner.Start();
-        }
-
-        private void CloseSpinner()
-        {
-            if(Spinner.IsVisible)
-            {
-                Spinner.Stop();
-                Spinner.Visibility = Visibility.Hidden;
-            }
-            Visibility = Visibility.Hidden;
-            FormHost.Focus();
-        }
-
+ 
 
         public void Connect()
         {
@@ -242,8 +228,10 @@ namespace WpfRdpTest
                 rdpControl.OnUserNameAcquired += RdpControl_OnUserNameAcquired;
                 rdpControl.OnWarning += RdpControl_OnWarning;
 
-                FormHost.Child = rdpControl;
- 
+                RemoteDesktopControlHost.Child = rdpControl;
+                rdpControl.Top = 0;
+                rdpControl.Left = 0;
+
                 rdpControl.Connect(ComputerName, User, null);
             }
             catch (Exception exception)
@@ -281,17 +269,31 @@ namespace WpfRdpTest
         {
             if(IsConnected)
             {
-                rdpControl.Show();
-                rdpControl.Select();
-                rdpControl.FullScreen = true;
+                Show();
+                rdpControl.Focus();
+                //rdpControl.FullScreen = true;
+                //BringWindowToTop(rdpControl.Handle);
 
-                Activate();
+                //BringWindowToTop(rdpControl.Handle);
             }
         }
 
-        
-        
-        
+        /// <summary>
+        /// Retrieves the error description for the session disconnect events
+        /// </summary>
+        /// <param name="disconnectReason">The disconnect reason.</param>
+        /// <returns></returns>
+        public string GetErrorDescription(DisconnectReason disconnectReason)
+        {
+            string ret = string.Empty;
+            if (rdpControl != null)
+                ret = rdpControl.GetErrorDescription((uint)disconnectReason);
+            return ret;
+        }
+
+
+
+
         // nCmdShow values:
         const int SW_HIDE = 0;
         const int SW_HSHOWNORMAL = 1;

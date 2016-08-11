@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using RemoteDesktop;
 
 namespace WpfRdpTest
 {
@@ -22,30 +23,24 @@ namespace WpfRdpTest
     {
         RDCHost host;
 
+
         public string Computer
         {
             get { return (string)GetValue(ComputerProperty); }
             set { SetValue(ComputerProperty, value); }
         }
-
         // Using a DependencyProperty as the backing store for Computer.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ComputerProperty =
             DependencyProperty.Register("Computer", typeof(string), typeof(MainWindow), new PropertyMetadata(string.Empty));
-
-
 
         public string User
         {
             get { return (string)GetValue(UserProperty); }
             set { SetValue(UserProperty, value); }
         }
-
         // Using a DependencyProperty as the backing store for UserName.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty UserProperty =
             DependencyProperty.Register("User", typeof(string), typeof(MainWindow), new PropertyMetadata(string.Empty));
-
-
-
 
         public bool IsConnected
         {
@@ -57,7 +52,34 @@ namespace WpfRdpTest
         public static readonly DependencyProperty IsConnectedProperty =
             DependencyProperty.Register("IsConnected", typeof(bool), typeof(MainWindow), new PropertyMetadata(false));
 
-
+        private ConnectionStatusEnum currentState = ConnectionStatusEnum.Disconnected;
+        public ConnectionStatusEnum ConnectionState
+        {
+            get { return currentState; }
+            set
+            {
+                currentState = value;
+                switch(currentState)
+                {
+                    case ConnectionStatusEnum.Connected:
+                        ConnectBtn.Visibility = Visibility.Hidden;
+                        RestoreBtn.Visibility = Visibility.Visible;
+                        CancelBtn.Visibility = Visibility.Hidden;
+                        break;
+                    case ConnectionStatusEnum.Connecting:
+                        ConnectBtn.Visibility = Visibility.Hidden;
+                        RestoreBtn.Visibility = Visibility.Hidden;
+                        CancelBtn.Visibility = Visibility.Visible;
+                        break;
+                    case ConnectionStatusEnum.Disconnected:
+                    default:
+                        ConnectBtn.Visibility = Visibility.Visible;
+                        RestoreBtn.Visibility = Visibility.Hidden;
+                        CancelBtn.Visibility = Visibility.Hidden;
+                        break;
+                }
+            }
+        }
 
         public MainWindow()
         {
@@ -88,43 +110,52 @@ namespace WpfRdpTest
         private void ConnectBtn_Click(object sender, RoutedEventArgs e)
         {
 
-            if (IsConnected)
+            if (string.IsNullOrEmpty(Computer))
             {
-                host.GoFullScreen();
-                
+                MessageBox.Show((string)FindResource("NoComputerName"), (string)FindResource("ErrorTitle"));
             }
             else
             {
-                if (string.IsNullOrEmpty(Computer))
-                {
-
-                }
-                else
-                {
-                    ConnectHost();
-                }
+                ConnectHost();
             }
         }
 
-        private void Host_OnDisconnected(object sender, EventArgs e)
+        private void Host_OnDisconnected(object sender, RemoteDesktopControl.DisconnectEventArgs args)
         {
-            IsConnected = false;
-            IsEnabled = true;
-            ConnectBtnText.Text = "Connect";
+            ConnectionState = ConnectionStatusEnum.Disconnected;
+
+            switch (args.reason)
+            {
+                // filter non-error resons for disconnection
+                case DisconnectReason.LocalNotError:
+                case DisconnectReason.ConnectionCanceled:
+                    break;
+                default:
+                    string errorMesssage = host.GetErrorDescription(args.reason);
+                    if(string.IsNullOrEmpty(errorMesssage))
+                    {
+                        errorMesssage = (string)FindResource("NotConnectedString");
+                    }
+                    MessageBox.Show(errorMesssage, (string)FindResource("RdpConnectionError"), MessageBoxButton.OK);
+                    break;
+            }
+
             if (host != null)
             {
                 host.Close();
+                host = null;
             }
+
         }
 
         private void Host_OnConnected(object sender, EventArgs e)
         {
-            IsConnected = true;
-            IsEnabled = true;
-            ConnectBtnText.Text = "Restore";
+            ConnectionState = ConnectionStatusEnum.Connected;
+           
             if (host != null)
             {
                 host.Show();
+                host.GoFullScreen();
             }
         }
 
@@ -138,15 +169,18 @@ namespace WpfRdpTest
                 DisconnectHost();
             }
 
+            ConnectionState = ConnectionStatusEnum.Connecting;
+
             host = new RDCHost(Computer, User);
             host.Owner = this;
             host.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             host.OnConnected += Host_OnConnected;
             host.OnDisconnected += Host_OnDisconnected;
+            host.OnStartWaiting += DisplaySpinner;
+            host.OnStopWaiting += CloseSpinner;
 
             host.Connect();
-            host.Show();
-            IsEnabled = false;
+
         }
 
         /// <summary>
@@ -158,8 +192,39 @@ namespace WpfRdpTest
             {
                 //host.Disconnect();
                 host.Close();
+                host = null;
             }
         }
 
+        private void DisplaySpinner(object sender, EventArgs e)
+        {
+            Spinner.Visibility = Visibility.Visible;
+            Spinner.Start();
+        }
+
+        private void CloseSpinner(object sender, EventArgs e)
+        {
+            if (Spinner.IsVisible)
+            {
+                Spinner.Stop();
+                Spinner.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void CancelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if(host != null)
+            {
+                host.Disconnect();
+            }
+        }
+
+        private void RestoreBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (host != null)
+            {
+                host.GoFullScreen();
+            }
+        }
     }
 }

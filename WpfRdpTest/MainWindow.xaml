@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfRdpTest"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Remote Desktop Connection" 
         Width="415" 
@@ -16,6 +17,7 @@
         <Style TargetType="Button">
             <Setter Property="BorderBrush" Value="{x:Null}"/>
             <Setter Property="Background" Value="{StaticResource ApolloBrushes.LBG1}"/>
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -88,6 +90,14 @@
             <Setter Property="Foreground" Value="{StaticResource ApolloBrushes.BG3}"/>
 
         </Style>
+        <sys:String x:Key="NotConnectedString">Disconnection reason could not be determined</sys:String>
+        <sys:String x:Key="RdpConnectionError" xml:space="preserve">RDP Connection Error</sys:String>
+        <sys:String x:Key="FullScreenTitle">Full Screen Support</sys:String>
+        <sys:String x:Key="FullScreenMessage" xml:space="preserve">Only full screen mode is supported by Apollo Room 
+Remote Desktop Connection</sys:String>
+
+        <sys:String x:Key="ErrorTitle">Remote Desktop Error</sys:String>
+        <sys:String x:Key="NoComputerName">A Computer name is required to attempt connection.</sys:String>
     </Window.Resources>
     <Grid Background="{StaticResource ApolloBrushes.LBG3}">
         <Grid.ColumnDefinitions>
@@ -180,14 +190,36 @@
                 Width="70" Height="30" 
                 Grid.Row="5" Grid.Column="2" 
                 Background="{StaticResource ApolloBrushes.WH}"
-                BorderThickness="0"
                 Click="ConnectBtn_Click" 
-                TabIndex="2" 
+                TabIndex="2"
                 >
             <TextBlock x:Name="ConnectBtnText" 
                        Style="{StaticResource ButtonTextStyle}"
                        Text="Connect"/>
         </Button>
+
+        <Button x:Name="CancelBtn" 
+                Width="70" Height="30" 
+                Grid.Row="5" Grid.Column="2" 
+                Background="{StaticResource ApolloBrushes.WH}"
+                Click="CancelBtn_Click" 
+                TabIndex="2"
+                Visibility="Hidden"
+                >
+            <TextBlock Style="{StaticResource ButtonTextStyle}" Text="Cancel"/>
+        </Button>
+
+        <Button x:Name="RestoreBtn" 
+                Width="70" Height="30" 
+                Grid.Row="5" Grid.Column="2" 
+                Background="{StaticResource ApolloBrushes.WH}"
+                Click="RestoreBtn_Click" 
+                TabIndex="2"
+                Visibility="Hidden"
+                >
+            <TextBlock Style="{StaticResource ButtonTextStyle}" Text="Restore"/>
+        </Button>
+        
 
         <Button x:Name="CloseBtn" 
                 Width="70" Height="30" 
@@ -202,12 +234,23 @@
                 Width="91" Height="30" 
                 Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" 
                 Margin="23,0,0,0" 
-                HorizontalAlignment="Left" VerticalAlignment="Center" BorderThickness="0"
+                HorizontalAlignment="Left" VerticalAlignment="Center" 
                 Click="PreSelectBtn_Click" 
                 TabIndex="4" 
                 >
             <TextBlock Style="{StaticResource ButtonTextStyle}" Text="Pre-selections"/>
         </Button>
+
+        <aucl:MetroCircleBusyIndicator 
+            xmlns:aucl ="clr-namespace:ApolloUserControlLibrary" 
+            x:Name="Spinner" 
+            ParticleColor="{DynamicResource ApolloBrushes.LBG1}" 
+            Grid.ColumnSpan="5" Grid.RowSpan="6" 
+            HorizontalAlignment="Center" VerticalAlignment="Center"
+            Visibility="Hidden"
+            >
+        </aucl:MetroCircleBusyIndicator>
+
 
     </Grid>
 </Window>
