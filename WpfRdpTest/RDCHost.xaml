@@ -7,23 +7,15 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Remote Desktop Connection" 
-        Width="10" Height="10" 
+        Width="1024" Height="786" 
         Closing="Window_Closing" 
         Background="{x:Null}" 
         WindowStartupLocation="CenterOwner" 
-        WindowStyle="None" 
         ScrollViewer.CanContentScroll="True" 
-        IsTabStop="False" 
+        IsTabStop="True" 
         ShowInTaskbar="False" 
-        ResizeMode="NoResize" 
         >
     <Window.Resources>
     </Window.Resources>
-    <Grid>
-        <WindowsFormsHost Name="RemoteDesktopControlHost" 
-                          Visibility="Hidden"
-                          Width="1920"
-                          Height="1080"
-                          />
-    </Grid>
+    <WindowsFormsHost Name="RemoteDesktopControlHost"/>
 </Window>

@@ -385,7 +385,6 @@ namespace RemoteDesktop
         {
             InitializeComponent();
 
-
             rdpClient.AdvancedSettings9.AuthenticationLevel = 2;
             rdpClient.AdvancedSettings9.EnableCredSspSupport = true;
             rdpClient.AdvancedSettings9.RedirectDrives = false;
@@ -528,16 +527,33 @@ namespace RemoteDesktop
         // Sets the virtual channel options for the Remote Desktop ActiveX control.
         //   SetVirtualChannelOptions
 
+        public const Int32 WM_SYSCOMMAND = 0x112;
+        public const Int32 SC_MAXIMIZE = 0xF030;
+        public const Int32 SC_MINIMIZE = 0xF020;
 
-
-        protected override void OnResize(EventArgs e)
+        protected override void WndProc(ref Message m)
         {
-            base.OnResize(e);
-            
-            if(IsConnected)
+            bool handled = false;
+            if (m.Msg == WM_SYSCOMMAND)
             {
+                if (m.WParam.ToInt32() == SC_MAXIMIZE)
+                {
+                    Trace.WriteLine("RemoteDesktopControl.WndProc: Maximize button caught");
+                    rdpClient.FullScreen = true;
+                    handled = true;
+                }
+                else if(m.WParam.ToInt32() == SC_MINIMIZE)
+                {
+                    Trace.WriteLine("RemoteDesktopControl.WndProc: Maximize button caught");
+                    rdpClient.FullScreen = false;
+                    handled = true;
+                }
+            }
 
 
+            if (!handled)
+            {
+                base.WndProc(ref m);
             }
         }
 

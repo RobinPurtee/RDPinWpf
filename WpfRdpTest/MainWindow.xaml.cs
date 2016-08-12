@@ -179,8 +179,17 @@ namespace WpfRdpTest
             host.OnStartWaiting += DisplaySpinner;
             host.OnStopWaiting += CloseSpinner;
 
+            host.Closed += Host_Closed;
             host.Connect();
 
+        }
+
+        private void Host_Closed(object sender, EventArgs e)
+        {
+            if(ConnectionState != ConnectionStatusEnum.Disconnected)
+            {
+                ConnectionState = ConnectionStatusEnum.Disconnected;
+            }
         }
 
         /// <summary>
