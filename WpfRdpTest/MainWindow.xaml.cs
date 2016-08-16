@@ -93,7 +93,11 @@ namespace WpfRdpTest
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             DataContext = this;
+        }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Disconnect();
         }
 
         private void PreSelectBtn_Click(object sender, RoutedEventArgs e)
@@ -112,85 +116,37 @@ namespace WpfRdpTest
             }
             else
             {
-                ConnectHost();
+                Connect();
             }
         }
 
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (host != null)
+            if (IsConnected)
             {
-                host.Disconnect();
+                Disconnect();
             }
         }
 
         private void RestoreBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (host != null)
+            if (IsConnected)
             {
-                host.GoFullScreen();
+                GoFullScreen();
             }
         }
 
+        /// <summary>
+        /// Close button handler
+        /// </summary>
+        /// <param name="sender">Normally "this"</param>
+        /// <param name="e"></param>
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
-            DisconnectHost();
             Close();
         }
 
-        private void Host_OnDisconnected(object sender, RemoteDesktopControl.DisconnectEventArgs args)
-        {
-        }
-
-        private void Host_OnConnected(object sender, EventArgs e)
-        {
-        }
-
-        /// <summary>
-        /// Create a new host controll and open the connection
-        /// </summary>
-        private void ConnectHost()
-        {
-            if(host != null)
-            {
-                DisconnectHost();
-            }
-
-            ConnectionState = ConnectionStatusEnum.Connecting;
-
-            host = new RDCHost(Computer, User); 
-            host.Owner = this;
-            host.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            host.OnConnected += Host_OnConnected;
-            host.OnDisconnected += Host_OnDisconnected;
-            host.StartWaiting += DisplaySpinner;
-            host.StopWaiting += CloseSpinner;
-
-            host.Closed += Host_Closed;
-            host.Connect();
-
-        }
-
-        private void Host_Closed(object sender, EventArgs e)
-        {
-            if(ConnectionState != ConnectionStatusEnum.Disconnected)
-            {
-                ConnectionState = ConnectionStatusEnum.Disconnected;
-            }
-        }
-
-        /// <summary>
-        /// Disconnect and close the current host control
-        /// </summary>
-        private void DisconnectHost()
-        {
-            if (host != null)
-            {
-                //host.Disconnect();
-                host.Close();
-                host = null;
-            }
-        }
+ 
 
 
         private void DisplaySpinner()

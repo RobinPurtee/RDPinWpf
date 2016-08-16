@@ -9,7 +9,8 @@
         Title="Remote Desktop Connection" 
         Width="415" 
         Height="260" 
-        Loaded="Window_Loaded" 
+        Loaded="Window_Loaded"
+        Closing="Window_Closing"
         WindowStyle="None" 
         WindowStartupLocation="CenterScreen" 
         ResizeMode="NoResize">
@@ -123,6 +124,7 @@ Remote Desktop Connection</sys:String>
             <RowDefinition Height="35*"/>
             <RowDefinition Height="55*"/>
         </Grid.RowDefinitions>
+        <WindowsFormsHost x:Name="RemoteDesktopControlHost"/>
         <!-- The background for the top of the dialog -->
         <Border Grid.Row="0" Grid.ColumnSpan="5" 
                 BorderThickness="0,0,0,1"

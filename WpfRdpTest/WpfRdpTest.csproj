@@ -61,9 +61,6 @@
     <Compile Include="MetroCircleBusyIndicator.xaml.cs">
       <DependentUpon>MetroCircleBusyIndicator.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RDCHost.xaml.cs">
-      <DependentUpon>RDCHost.xaml</DependentUpon>
-    </Compile>
     <Compile Include="RemoteDesktop.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -82,10 +79,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="PreSetDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="RDCHost.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

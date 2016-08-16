@@ -14,10 +14,10 @@ namespace WpfRdpTest
 
 
         #region RDP Conntrol event handlers
-        private void RdpControl_OnAuthenticationWarningDismissed(object sender, EventArgs e)
-        {
-            Trace.WriteLine("RdpControl_OnAuthenticationWarningDismissed ");
-        }
+        //private void RdpControl_OnAuthenticationWarningDismissed(object sender, EventArgs e)
+        //{
+        //    Trace.WriteLine("RdpControl_OnAuthenticationWarningDismissed ");
+        //}
 
         private void RdpControl_OnAuthenticationWarningDisplayed(object sender, EventArgs e)
         {
@@ -37,15 +37,15 @@ namespace WpfRdpTest
             DisplaySpinner();
         }
 
-        private void RdpControl_OnConnectionBarPullDown(object sender, EventArgs e)
-        {
-            Trace.WriteLine("RdpControl_OnConnectionBarPullDown ");
-        }
+        //private void RdpControl_OnConnectionBarPullDown(object sender, EventArgs e)
+        //{
+        //    Trace.WriteLine("RdpControl_OnConnectionBarPullDown ");
+        //}
 
-        private void RdpControl_OnConfirmClose(object sender, EventArgs e)
-        {
-            Trace.WriteLine("RdpControl_OnConfirmClose called");
-        }
+        //private void RdpControl_OnConfirmClose(object sender, EventArgs e)
+        //{
+        //    Trace.WriteLine("RdpControl_OnConfirmClose called");
+        //}
 
         private void RdpControl_OnConnected(object sender, EventArgs e)
         {
@@ -60,6 +60,7 @@ namespace WpfRdpTest
         private void RdpControl_OnConnecting(object sender, EventArgs e)
         {
             Trace.WriteLine("RdpControl_OnConnecting called");
+            ConnectionState = ConnectionStatusEnum.Connecting;
             DisplaySpinner();
         }
 
@@ -116,17 +117,18 @@ namespace WpfRdpTest
                 errorMesssage = (string)FindResource("NotConnectedString");
             }
             MessageBox.Show(errorMesssage, (string)FindResource("RdpConnectionError"), MessageBoxButton.OK);
+            Disconnect();
         }
 
-        private void RdpControl_OnDevicesButtonPressed(object sender, EventArgs e)
-        {
-            Trace.WriteLine("RdpControl_OnDevicesButtonPressed ");
-        }
+        //private void RdpControl_OnDevicesButtonPressed(object sender, EventArgs e)
+        //{
+        //    Trace.WriteLine("RdpControl_OnDevicesButtonPressed ");
+        //}
 
-        private void RdpControl_OnEnterFullScreenMode(object sender, EventArgs e)
-        {
-            Trace.WriteLine("RdpControl_OnEnterFullScreenMode ");
-        }
+        //private void RdpControl_OnEnterFullScreenMode(object sender, EventArgs e)
+        //{
+        //    Trace.WriteLine("RdpControl_OnEnterFullScreenMode ");
+        //}
 
         private void RdpControl_OnLeaveFullScreenMode(object sender, EventArgs e)
         {
@@ -138,6 +140,7 @@ namespace WpfRdpTest
         private void RdpControl_OnLoginComplete(object sender, EventArgs e)
         {
             Trace.WriteLine("RdpControl_OnLoginComplete ");
+            rdpControl.FullScreen = true;
         }
 
         private void RdpControl_OnLogonError(object sender, RemoteDesktopControl.LogonErrorEventArgs args)
@@ -158,6 +161,10 @@ namespace WpfRdpTest
         private void RdpControl_OnRequestLeaveFullScreen(object sender, EventArgs e)
         {
             Trace.WriteLine("RdpControl_OnRequestLeaveFullScreen ");
+            if(rdpControl != null)
+            {
+                rdpControl.FullScreen = true;
+            }
         }
 
 
@@ -178,20 +185,24 @@ namespace WpfRdpTest
             {
                 throw new ArgumentException((string)FindResource("NoComputerNameError"));
             }
+            if(rdpControl != null)
+            {
+                Disconnect();
+            }
             // Create the rdp control.
             rdpControl = new RemoteDesktopControl();
-            rdpControl.OnAuthenticationWarningDismissed += RdpControl_OnAuthenticationWarningDismissed;
+            //rdpControl.OnAuthenticationWarningDismissed += RdpControl_OnAuthenticationWarningDismissed;
             rdpControl.OnAuthenticationWarningDisplayed += RdpControl_OnAuthenticationWarningDisplayed;
             rdpControl.OnAutoReconnected += RdpControl_OnAutoReconnected;
             rdpControl.OnAutoReconnecting += RdpControl_OnAutoReconnecting;
 
-            rdpControl.OnConfirmClose += RdpControl_OnConfirmClose;
+            //rdpControl.OnConfirmClose += RdpControl_OnConfirmClose;
             rdpControl.OnConnected += RdpControl_OnConnected;
             rdpControl.OnConnecting += RdpControl_OnConnecting;
-            rdpControl.OnConnectionBarPullDown += RdpControl_OnConnectionBarPullDown;
-            rdpControl.OnDevicesButtonPressed += RdpControl_OnDevicesButtonPressed;
+            //rdpControl.OnConnectionBarPullDown += RdpControl_OnConnectionBarPullDown;
+            //rdpControl.OnDevicesButtonPressed += RdpControl_OnDevicesButtonPressed;
             rdpControl.OnDisconnected += RdpControl_OnDisconnected;
-            rdpControl.OnEnterFullScreenMode += RdpControl_OnEnterFullScreenMode;
+            //rdpControl.OnEnterFullScreenMode += RdpControl_OnEnterFullScreenMode;
             rdpControl.OnFatalError += RdpControl_OnFatalError;
             rdpControl.OnLeaveFullScreenMode += RdpControl_OnLeaveFullScreenMode;
             rdpControl.OnLoginComplete += RdpControl_OnLoginComplete;
@@ -239,8 +250,8 @@ namespace WpfRdpTest
                 if (rdpControl != null)
                 {
                     rdpControl.Dispose();
-                    rdpControl = null;
                 }
+                rdpControl = null;
             }
         }
 
