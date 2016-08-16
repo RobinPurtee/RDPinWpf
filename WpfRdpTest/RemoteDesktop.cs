@@ -11,7 +11,7 @@ namespace WpfRdpTest
 
         private RemoteDesktopControl rdpControl;
 
- 
+
 
         #region RDP Conntrol event handlers
         private void RdpControl_OnAuthenticationWarningDismissed(object sender, EventArgs e)
@@ -96,7 +96,7 @@ namespace WpfRdpTest
         {
             Trace.WriteLine("RdpControl_OnFatalError with error:" + args.error.ToString());
             string errorMesssage;
-            switch(args.error)
+            switch (args.error)
             {
                 case FatalErrorType.Winsock:
                     errorMesssage = (string)FindResource("WinsockFatalError");
@@ -174,7 +174,7 @@ namespace WpfRdpTest
 
         public void Connect()
         {
-            if(string.IsNullOrEmpty(Computer))
+            if (string.IsNullOrEmpty(Computer))
             {
                 throw new ArgumentException((string)FindResource("NoComputerNameError"));
             }
@@ -246,7 +246,7 @@ namespace WpfRdpTest
 
         public void GoFullScreen()
         {
-            if(IsActuallyConnected)
+            if (IsActuallyConnected)
             {
                 // this is all that is need has the fullscreen mode left handler
                 // will reset it to full screen.

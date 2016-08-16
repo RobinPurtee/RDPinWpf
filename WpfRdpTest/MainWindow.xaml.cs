@@ -21,7 +21,6 @@ namespace WpfRdpTest
     /// </summary>
     public partial class MainWindow : Window
     {
-        RDCHost host;
 
 
         public string Computer
@@ -65,17 +64,20 @@ namespace WpfRdpTest
                         ConnectBtn.Visibility = Visibility.Hidden;
                         RestoreBtn.Visibility = Visibility.Visible;
                         CancelBtn.Visibility = Visibility.Hidden;
+                        IsConnected = true;
                         break;
                     case ConnectionStatusEnum.Connecting:
                         ConnectBtn.Visibility = Visibility.Hidden;
                         RestoreBtn.Visibility = Visibility.Hidden;
                         CancelBtn.Visibility = Visibility.Visible;
+                        IsConnected = true;
                         break;
                     case ConnectionStatusEnum.Disconnected:
                     default:
                         ConnectBtn.Visibility = Visibility.Visible;
                         RestoreBtn.Visibility = Visibility.Hidden;
                         CancelBtn.Visibility = Visibility.Hidden;
+                        IsConnected = false;
                         break;
                 }
             }
@@ -92,12 +94,6 @@ namespace WpfRdpTest
         {
             DataContext = this;
 
-        }
-
-        private void CloseBtn_Click(object sender, RoutedEventArgs e)
-        {
-            DisconnectHost();
-            Close();
         }
 
         private void PreSelectBtn_Click(object sender, RoutedEventArgs e)
@@ -120,43 +116,34 @@ namespace WpfRdpTest
             }
         }
 
-        private void Host_OnDisconnected(object sender, RemoteDesktopControl.DisconnectEventArgs args)
+        private void CancelBtn_Click(object sender, RoutedEventArgs e)
         {
-            ConnectionState = ConnectionStatusEnum.Disconnected;
-
-            switch (args.reason)
-            {
-                // filter non-error resons for disconnection
-                case DisconnectReason.LocalNotError:
-                case DisconnectReason.ConnectionCanceled:
-                    break;
-                default:
-                    string errorMesssage = host.GetErrorDescription(args.reason);
-                    if(string.IsNullOrEmpty(errorMesssage))
-                    {
-                        errorMesssage = (string)FindResource("NotConnectedString");
-                    }
-                    MessageBox.Show(errorMesssage, (string)FindResource("RdpConnectionError"), MessageBoxButton.OK);
-                    break;
-            }
-
             if (host != null)
             {
-                host.Close();
-                host = null;
+                host.Disconnect();
             }
+        }
 
+        private void RestoreBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (host != null)
+            {
+                host.GoFullScreen();
+            }
+        }
+
+        private void CloseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            DisconnectHost();
+            Close();
+        }
+
+        private void Host_OnDisconnected(object sender, RemoteDesktopControl.DisconnectEventArgs args)
+        {
         }
 
         private void Host_OnConnected(object sender, EventArgs e)
         {
-            ConnectionState = ConnectionStatusEnum.Connected;
-           
-            if (host != null)
-            {
-                host.Show();
-                host.GoFullScreen();
-            }
         }
 
         /// <summary>
@@ -171,13 +158,13 @@ namespace WpfRdpTest
 
             ConnectionState = ConnectionStatusEnum.Connecting;
 
-            host = new RDCHost(Computer, User);
+            host = new RDCHost(Computer, User); 
             host.Owner = this;
             host.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             host.OnConnected += Host_OnConnected;
             host.OnDisconnected += Host_OnDisconnected;
-            host.OnStartWaiting += DisplaySpinner;
-            host.OnStopWaiting += CloseSpinner;
+            host.StartWaiting += DisplaySpinner;
+            host.StopWaiting += CloseSpinner;
 
             host.Closed += Host_Closed;
             host.Connect();
@@ -205,13 +192,14 @@ namespace WpfRdpTest
             }
         }
 
-        private void DisplaySpinner(object sender, EventArgs e)
+
+        private void DisplaySpinner()
         {
             Spinner.Visibility = Visibility.Visible;
             Spinner.Start();
         }
 
-        private void CloseSpinner(object sender, EventArgs e)
+        private void CloseSpinner()
         {
             if (Spinner.IsVisible)
             {
@@ -220,20 +208,5 @@ namespace WpfRdpTest
             }
         }
 
-        private void CancelBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if(host != null)
-            {
-                host.Disconnect();
-            }
-        }
-
-        private void RestoreBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (host != null)
-            {
-                host.GoFullScreen();
-            }
-        }
     }
 }

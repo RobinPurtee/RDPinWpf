@@ -91,11 +91,19 @@
 
         </Style>
         <sys:String x:Key="NotConnectedString">Disconnection reason could not be determined</sys:String>
-        <sys:String x:Key="RdpConnectionError" xml:space="preserve">RDP Connection Error</sys:String>
+        <sys:String x:Key="RdpConnectionError">Remote Desktop Connection Error</sys:String>
+        <sys:String x:Key="DefaultFatalError" xml:space="preserve">An unknown fatal error has occured  
+in Remote Desktop Connection</sys:String>
+        <sys:String x:Key="WinsockFatalError" xml:space="preserve">A fatal connection error has occured
+in Remote Desktop Connection</sys:String>
+        <sys:String x:Key="CreationFatalError" xml:space="preserve">A fatal error creating the Window for
+Remote Desktop Connection has occured</sys:String>
+        <sys:String x:Key="OutofMemoryFatalError" xml:space="preserve">An Out-of-Memory error has occured 
+in Remote Desktop Connection</sys:String>
         <sys:String x:Key="FullScreenTitle">Full Screen Support</sys:String>
         <sys:String x:Key="FullScreenMessage" xml:space="preserve">Only full screen mode is supported by Apollo Room 
 Remote Desktop Connection</sys:String>
-
+        <sys:String x:Key="NoComputerNameError" xml:space="preserve">The name of the computer to connect to is required</sys:String>
         <sys:String x:Key="ErrorTitle">Remote Desktop Error</sys:String>
         <sys:String x:Key="NoComputerName">A Computer name is required to attempt connection.</sys:String>
     </Window.Resources>

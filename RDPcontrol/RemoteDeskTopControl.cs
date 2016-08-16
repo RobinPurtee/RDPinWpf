@@ -113,8 +113,7 @@ namespace RemoteDesktop
                 reason = (DisconnectReason)args.discReason;
             }             
         }
-        public delegate void DisconnectedEventHandler(object sender, DisconnectEventArgs args);
-        public event DisconnectedEventHandler OnDisconnected;
+        public event EventHandler<DisconnectEventArgs> OnDisconnected;
         private void AxRdpClient_OnDisconnected(object sender, IMsTscAxEvents_OnDisconnectedEvent e)
         {
             if(OnDisconnected != null)
@@ -152,7 +151,6 @@ namespace RemoteDesktop
                 networkAvailable = eventArgs.networkAvailable;
             }
         }
-        public delegate void AutoReconnectingEventHandler(object sender, AutoReconnectingEventArgs args);
         public event EventHandler<AutoReconnectingEventArgs> OnAutoReconnecting;
         private void AxRdpClient_OnAutoReconnecting(object sender, IMsTscAxEvents_OnAutoReconnecting2Event args)
         {
@@ -206,8 +204,7 @@ namespace RemoteDesktop
                 error = (FatalErrorType)args.errorCode;
             }
         }
-        public delegate void FatalErrorEventHandler(object sender, FatalErrorEventArgs args);
-        public event FatalErrorEventHandler OnFatalError;
+        public event EventHandler<FatalErrorEventArgs> OnFatalError;
         private void AxRdpClient_OnFatalError(object sender, IMsTscAxEvents_OnFatalErrorEvent e)
         {
             if(OnFatalError != null)
@@ -232,44 +229,42 @@ namespace RemoteDesktop
             remove { rdpClient.OnLoginComplete -= value; }
         }
         #region Logon Error
-        public class LogonErrorEvent : EventArgs
+        public class LogonErrorEventArgs : EventArgs
         {
             public LogonErrorType error;
 
-            public LogonErrorEvent(IMsTscAxEvents_OnLogonErrorEvent code)
+            public LogonErrorEventArgs(IMsTscAxEvents_OnLogonErrorEvent code)
             {
                 error = (LogonErrorType)code.lError;
             }
         }
-        public delegate void LogonErrorEventHandler(object sender, LogonErrorEvent args);
-        public event LogonErrorEventHandler OnLogonError;
+        public event EventHandler<LogonErrorEventArgs> OnLogonError;
         private void AxRdpClient_OnLogonError(object sender, IMsTscAxEvents_OnLogonErrorEvent e)
         {
             if(OnLogonError != null)
-                OnLogonError(sender, new LogonErrorEvent(e));
+                OnLogonError(sender, new LogonErrorEventArgs(e));
         }
         #endregion
         //public event IMsTscAxEvents_OnMouseInputModeChangedEventHandler OnMouseInputModeChanged;
         //public event IMsTscAxEvents_OnNetworkStatusChangedEventHandler OnNetworkStatusChanged;
         //public event IMsTscAxEvents_OnReceivedTSPublicKeyEventHandler OnReceivedTSPublicKey;
         #region RemoteDesktopSizeChanged
-        public class RemoteDesktopSizeChangeEvent : EventArgs
+        public class RemoteDesktopSizeChangeEventArgs : EventArgs
         {
             public int height;
             public int width;
 
-            public RemoteDesktopSizeChangeEvent(IMsTscAxEvents_OnRemoteDesktopSizeChangeEvent args)
+            public RemoteDesktopSizeChangeEventArgs(IMsTscAxEvents_OnRemoteDesktopSizeChangeEvent args)
             {
                 height = args.height;
                 width = args.width;
             }
         }
-        public delegate void RemoteDesktopSizeChangeEventHandler(object sender, RemoteDesktopSizeChangeEvent args);
-        public event RemoteDesktopSizeChangeEventHandler OnRemoteDesktopSizeChange;
+        public event EventHandler<RemoteDesktopSizeChangeEventArgs> OnRemoteDesktopSizeChange;
         private void AxRdpClient_OnRemoteDesktopSizeChange(object sender, IMsTscAxEvents_OnRemoteDesktopSizeChangeEvent e)
         {
             if(OnRemoteDesktopSizeChange != null)
-                OnRemoteDesktopSizeChange(sender, new RemoteDesktopSizeChangeEvent(e));
+                OnRemoteDesktopSizeChange(sender, new RemoteDesktopSizeChangeEventArgs(e));
         }
         #endregion
         // running remote apps is not supported
@@ -294,38 +289,36 @@ namespace RemoteDesktop
         // server messages are not supported
         //public event IMsTscAxEvents_OnServiceMessageReceivedEventHandler OnServiceMessageReceived;
         #region UserName Acquired event
-        public class UserNameAcquiredEvent : EventArgs
+        public class UserNameAcquiredEventArgs : EventArgs
         {
             public string userName;
 
-            public UserNameAcquiredEvent(IMsTscAxEvents_OnUserNameAcquiredEvent e)
+            public UserNameAcquiredEventArgs(IMsTscAxEvents_OnUserNameAcquiredEvent e)
             {
                 userName = e.bstrUserName;
             }
         }
-        public delegate void UserNameAcquiredEventHandler(object sender, UserNameAcquiredEvent args);
-        public event UserNameAcquiredEventHandler OnUserNameAcquired;
+        public event EventHandler<UserNameAcquiredEventArgs> OnUserNameAcquired;
         private void AxRdpClient_OnUserNameAcquired(object sender, IMsTscAxEvents_OnUserNameAcquiredEvent e)
         {
             if(OnUserNameAcquired != null)
-                OnUserNameAcquired(sender, new UserNameAcquiredEvent(e));
+                OnUserNameAcquired(sender, new UserNameAcquiredEventArgs(e));
         }
         #endregion
         #region Warning event
-        public class WarningEvent : EventArgs
+        public class WarningEventArgs : EventArgs
         {
             public WarningType warning;
-            public WarningEvent(IMsTscAxEvents_OnWarningEvent arg)
+            public WarningEventArgs(IMsTscAxEvents_OnWarningEvent arg)
             {
                 warning = (WarningType)arg.warningCode;
             }
         }
-        public delegate void WarningEventHandler(object sender, WarningEvent e);
-        public event WarningEventHandler OnWarning;
+        public event EventHandler<WarningEventArgs> OnWarning;
         private void AxRdpClient_OnWarning(object sender, IMsTscAxEvents_OnWarningEvent e)
         {
             if(OnWarning != null)
-                OnWarning(sender, new WarningEvent(e));
+                OnWarning(sender, new WarningEventArgs(e));
         }
         #endregion
         #endregion
@@ -366,6 +359,9 @@ namespace RemoteDesktop
             }
         }
 
+        /// <summary>
+        /// Test if the control is currently in full screen mode.
+        /// </summary>
         public bool FullScreen
         {
             get { return IsConnected ? false : rdpClient.FullScreen; }

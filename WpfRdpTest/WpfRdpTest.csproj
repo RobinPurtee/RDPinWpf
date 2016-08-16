@@ -64,6 +64,7 @@
     <Compile Include="RDCHost.xaml.cs">
       <DependentUpon>RDCHost.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RemoteDesktop.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
